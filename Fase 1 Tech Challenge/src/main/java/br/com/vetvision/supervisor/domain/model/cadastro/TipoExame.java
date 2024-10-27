@@ -1,4 +1,4 @@
-package br.com.vetvision.supervisor.domain.cadastro;
+package br.com.vetvision.supervisor.domain.model.cadastro;
 
 public class TipoExame {
     private String nome;
