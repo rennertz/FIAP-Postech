@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SupervisorDeExamesVetVisionApplication {
 
 	public static void main(String[] args) {
+		System.out.println("Aplicação inicializada");
 		SpringApplication.run(SupervisorDeExamesVetVisionApplication.class, args);
 	}
 
