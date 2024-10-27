@@ -1,0 +1,5 @@
+services:
+  supervisor:
+    build:
+      context: ./Fase 1 Tech Challenge/.
+    container_name: vetvision-supervisor
