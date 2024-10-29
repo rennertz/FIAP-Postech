@@ -1,4 +1,4 @@
-package br.com.vetvision.supervisor.domain.model.cadastro;
+package br.com.vetvision.supervisor.domain.model.oferta;
 
 public class Consultor {
     private String nome;

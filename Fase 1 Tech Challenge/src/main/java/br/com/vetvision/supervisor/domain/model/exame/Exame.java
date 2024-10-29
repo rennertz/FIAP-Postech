@@ -1,20 +1,18 @@
 package br.com.vetvision.supervisor.domain.model.exame;
 
-import br.com.vetvision.supervisor.domain.model.cadastro.Clinica;
-import br.com.vetvision.supervisor.domain.model.cadastro.PlanoVet;
+import br.com.vetvision.supervisor.domain.model.oferta.OfertaAtendimento;
+import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 
 import java.time.LocalDateTime;
 
 public class Exame {
-    private int id;
-    private Clinica clinica;
-    private Pet pet;
-    private PlanoVet plano;
 
-    private Oferta ofertaAtual;
+    private Solicitacao solicitacao;
+    private OfertaAtendimento agendamentoConfirmado;
+
     private String codigoConfirmacao;
-    private String conteudoLaudo;
+    private LocalDateTime momentoAtendimento;
 
-    private LocalDateTime momentoCriacao;
-    private LocalDateTime momentoExaminado;
+    private Laudo laudo;
+
 }

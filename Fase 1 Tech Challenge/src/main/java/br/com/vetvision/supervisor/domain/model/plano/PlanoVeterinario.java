@@ -1,8 +1,8 @@
-package br.com.vetvision.supervisor.domain.model.cadastro;
+package br.com.vetvision.supervisor.domain.model.plano;
 
 import java.util.List;
 
-public class PlanoVet {
+public class PlanoVeterinario {
     private String cnpj;
     private String nome;
     private List<TipoExame> examesCobertos;

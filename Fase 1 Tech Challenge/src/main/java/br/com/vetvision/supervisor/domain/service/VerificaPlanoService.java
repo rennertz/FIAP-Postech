@@ -1,13 +1,13 @@
 package br.com.vetvision.supervisor.domain.service;
 
-import br.com.vetvision.supervisor.domain.model.cadastro.PlanoVet;
-import br.com.vetvision.supervisor.domain.model.cadastro.TipoExame;
-import br.com.vetvision.supervisor.domain.model.exame.Pet;
+import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinario;
+import br.com.vetvision.supervisor.domain.model.plano.TipoExame;
+import br.com.vetvision.supervisor.domain.model.solicitacao.Pet;
 
 public interface VerificaPlanoService {
 
-    boolean planoAtivo(PlanoVet planoVet, Pet pet);
+    boolean planoAtivo(PlanoVeterinario planoVeterinario, Pet pet);
 
-    boolean planoCobre(PlanoVet planoVet, TipoExame exame);
+    boolean planoCobre(PlanoVeterinario planoVeterinario, TipoExame exame);
 
 }

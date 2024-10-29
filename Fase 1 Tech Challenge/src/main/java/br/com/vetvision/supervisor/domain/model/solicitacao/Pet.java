@@ -1,4 +1,4 @@
-package br.com.vetvision.supervisor.domain.model.exame;
+package br.com.vetvision.supervisor.domain.model.solicitacao;
 
 import java.time.LocalDate;
 
