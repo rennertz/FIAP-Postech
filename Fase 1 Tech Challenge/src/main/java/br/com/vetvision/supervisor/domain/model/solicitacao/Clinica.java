@@ -6,5 +6,10 @@ public class Clinica {
     private String endereco;
     private String contato;   // para notificação
 
-
+    public Clinica(String cnpj, String nome, String endereco, String contato) {
+        this.cnpj = cnpj;
+        this.nome = nome;
+        this.endereco = endereco;
+        this.contato = contato;
+    }
 }

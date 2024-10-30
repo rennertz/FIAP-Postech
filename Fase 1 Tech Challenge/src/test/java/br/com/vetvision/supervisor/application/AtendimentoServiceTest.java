@@ -1,9 +1,12 @@
 package br.com.vetvision.supervisor.application;
 
 import br.com.vetvision.supervisor.application.impl.AtendimentoServiceImpl;
+import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static br.com.vetvision.supervisor.application.MockObjects.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AtendimentoServiceTest {
 
@@ -11,7 +14,13 @@ class AtendimentoServiceTest {
 
     @Test
     void solicitarExameTest() {
-        assertTrue(true);
+        Solicitacao solicitacao = new Solicitacao(mockClinica, mockPet, mockPlano);
+
+        Solicitacao resultado = atendimentoService.solicitarExame(solicitacao);
+        
+        assertTrue(resultado.getId() > 0);
+        assertNotNull(resultado.getMomentoCriacao());
+        assertNull(resultado.getOfertaAtual());
     }
 
     @Test
