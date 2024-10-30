@@ -6,8 +6,6 @@ import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 import java.time.LocalDateTime;
 
 public class Exame {
-
-    private Solicitacao solicitacao;
     private OfertaAtendimento agendamentoConfirmado;
 
     private String codigoConfirmacao;
