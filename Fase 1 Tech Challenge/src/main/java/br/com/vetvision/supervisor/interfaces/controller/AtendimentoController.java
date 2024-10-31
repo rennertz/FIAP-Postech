@@ -8,6 +8,7 @@ import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/solicitacao")
+@Tag(name = "1. Atendimento", description = "Atendimento na visao da Clinica")
 public class AtendimentoController {
 
     private static final String SOLICITACAO_EXEMPLO = """

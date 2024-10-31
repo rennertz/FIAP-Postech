@@ -15,12 +15,12 @@ import static org.mockito.Mockito.when;
 class AtendimentoServiceTest {
 
     SolicitacaoRepository solicitacaoRepository;
-    AtendimentoService atendimentoService;
+    AtendimentoService service;
 
     @BeforeEach
     public void setUp() {
         solicitacaoRepository = mock(SolicitacaoRepository.class);
-        atendimentoService = new AtendimentoServiceImpl(solicitacaoRepository);
+        service = new AtendimentoServiceImpl(solicitacaoRepository);
     }
 
     @Test
@@ -29,7 +29,7 @@ class AtendimentoServiceTest {
         Solicitacao solicitacaoResposta = new Solicitacao(mockClinica, mockPet, mockPlano);
 
         when(solicitacaoRepository.criaSolicitacao(solicitacao)).thenReturn(solicitacaoResposta);
-        Solicitacao resultado = atendimentoService.solicitarExame(solicitacao);
+        Solicitacao resultado = service.solicitarExame(solicitacao);
         
         assertTrue(resultado.getId() > 0);
         assertNotNull(resultado.getMomentoCriacao());
@@ -37,22 +37,8 @@ class AtendimentoServiceTest {
     }
 
     @Test
-    void ofertarAtendimentoTest() {
-        assertTrue(true);
-    }
-
-    @Test
     void aceitarOfertaTest() {
         assertTrue(true);
     }
 
-    @Test
-    void realizarExameTest() {
-        assertTrue(true);
-    }
-
-    @Test
-    void encaminharLaudoTest() {
-        assertTrue(true);
-    }
 }
