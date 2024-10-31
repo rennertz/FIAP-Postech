@@ -24,22 +24,8 @@ public class AtendimentoServiceImpl implements AtendimentoService {
     }
 
     @Override
-    public OfertaAtendimento ofertarAtendimento(OfertaAtendimento ofertaAtendimento) {
-        return null;
-    }
-
-    @Override
     public Exame aceitarOferta(OfertaAtendimento ofertaAtendimento) {
         return null;
     }
 
-    @Override
-    public Exame realizarExame(Exame exame) {
-        return null;
-    }
-
-    @Override
-    public Exame encaminharLaudo(Exame exame) {
-        return null;
-    }
 }

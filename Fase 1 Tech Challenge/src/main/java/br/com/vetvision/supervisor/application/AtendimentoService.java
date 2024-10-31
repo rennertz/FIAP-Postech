@@ -8,9 +8,5 @@ public interface AtendimentoService {
 
     Solicitacao solicitarExame(Solicitacao solicitacao);
 
-    OfertaAtendimento ofertarAtendimento(OfertaAtendimento ofertaAtendimento);
     Exame aceitarOferta(OfertaAtendimento ofertaAtendimento);
-
-    Exame realizarExame(Exame exame);
-    Exame encaminharLaudo(Exame exame);
 }
