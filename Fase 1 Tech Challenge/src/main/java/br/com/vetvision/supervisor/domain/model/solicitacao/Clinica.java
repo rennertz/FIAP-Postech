@@ -27,5 +27,7 @@ public class Clinica {
         this.endereco = endereco;
         this.contato = contato;
     }
+    public Clinica() {
+    }
 
 }

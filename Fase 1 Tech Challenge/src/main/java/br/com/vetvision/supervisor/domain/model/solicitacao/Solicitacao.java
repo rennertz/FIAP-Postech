@@ -4,6 +4,7 @@ import br.com.vetvision.supervisor.domain.model.oferta.OfertaAtendimento;
 import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinario;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +15,9 @@ public class Solicitacao {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Getter
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "clinica_cnpj")
     private Clinica clinica;
 
@@ -22,7 +25,9 @@ public class Solicitacao {
     private Pet pet;
 
     // TODO: remover cascade e salvar com servico proprio
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Getter
+    @Setter
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "plano_cnpj")
     private PlanoVeterinario plano;
 

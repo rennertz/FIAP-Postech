@@ -24,6 +24,8 @@ public class PlanoVeterinario {
         this.cnpj = cnpj;
         this.nome = nome;
     }
+    public PlanoVeterinario() {
+    }
 
     public void adicionaExameCoberto(TipoExame exame) {
         examesCobertos.add(exame);
