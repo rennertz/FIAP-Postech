@@ -38,7 +38,7 @@ public class AdminServiceImpl implements AdminService {
         List<String> nomeExamesCobertos = plano.getExamesCobertos().stream()
                 .map(TipoExame::getNome).toList();
 
-        return new PlanoVeterinarioExamesSimplesDTO(plano.getCnpj(), plano.getCnpj(), nomeExamesCobertos);
+        return new PlanoVeterinarioExamesSimplesDTO(plano.getCnpj(), plano.getNome(), nomeExamesCobertos);
     }
 
     @Override

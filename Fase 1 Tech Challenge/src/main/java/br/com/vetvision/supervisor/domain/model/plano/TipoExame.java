@@ -26,4 +26,8 @@ public class TipoExame {
 
     @ManyToMany(mappedBy = "examesCobertos")
     private List<PlanoVeterinario> planosQueCobrem;
+
+    void sanitizaNomeExame() {
+        this.nome = this.nome.toUpperCase();
+    }
 }

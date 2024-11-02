@@ -35,6 +35,7 @@ public class PlanoVeterinario {
     }
 
     public void adicionaExameCoberto(TipoExame exame) {
+        exame.sanitizaNomeExame();
         examesCobertos.add(exame);
     }
 
