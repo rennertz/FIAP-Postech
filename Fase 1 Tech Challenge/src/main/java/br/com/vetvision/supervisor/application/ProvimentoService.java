@@ -5,10 +5,10 @@ import br.com.vetvision.supervisor.domain.model.oferta.OfertaAtendimento;
 
 public interface ProvimentoService {
 
-    Exame encaminharLaudo(Exame exame);
-
     OfertaAtendimento ofertarAtendimento(OfertaAtendimento ofertaAtendimento);
 
     Exame realizarExame(Exame exame);
+
+    Exame encaminharLaudo(Exame exame);
 
 }
