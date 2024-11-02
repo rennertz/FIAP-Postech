@@ -30,24 +30,29 @@ public class AtendimentoServiceImpl implements AtendimentoService {
 
     @Override
     public Solicitacao solicitarExame(Solicitacao solicitacao) {
-        verificaSolicitacao(solicitacao);
+
+        //verifica se a clinica existe antes de criar uma nova
+        Clinica clinica = clinicaRepository.clinicaExiste(solicitacao.getClinica().getCnpj())
+                .orElseGet(()-> clinicaRepository.criarClinica(solicitacao.getClinica()));
+
+        solicitacao.setClinica(clinica);
+
+        //verifica se o plano existe, caso não: lanca erro
+        PlanoVeterinario plano = planoVeterinarioRepository.planoExiste(solicitacao.getPlano().getCnpj())
+                .orElseThrow(()-> new RuntimeException("Plano não cadastrado no sistema"));
+
         return solicitacaoRepository.criaSolicitacao(solicitacao);
 
     }
 
     private void verificaSolicitacao(Solicitacao solicitacao) {
         //verifica se a clinica existe antes de criar uma nova
-        Clinica clinica = solicitacao.getClinica();
-        if(!clinicaRepository.clinicaExiste(clinica.getCnpj())){
-            clinica = clinicaRepository.criarClinica(clinica);
-        };
-        solicitacao.setClinica(clinica);
+
 
         //verifica se o plano existe antes de criar um novo
-        PlanoVeterinario plano = solicitacao.getPlano();
-        if(!planoVeterinarioRepository.planoExiste(plano.getCnpj())){
-            plano = planoVeterinarioRepository.criarPlano(plano);
-        };
+        PlanoVeterinario plano = planoVeterinarioRepository.planoExiste(solicitacao.getPlano().getCnpj())
+                .orElseGet(()-> planoVeterinarioRepository.criarPlano(solicitacao.getPlano()));
+
         solicitacao.setPlano(plano);
     }
 
