@@ -8,10 +8,9 @@ import java.util.Optional;
 
 public interface ClinicaRepositoryJPA extends CrudRepository<Clinica, String>, ClinicaRepository {
 
-    default Optional<Clinica> clinicaExiste(String cnpj){ return findById(cnpj);};
-    default Clinica criarClinica(Clinica clinica){return save(clinica);};
+    @Override
+    default Optional<Clinica> clinicaExiste(String cnpj){ return findById(cnpj);}
 
-   ;
-
-
+    @Override
+    default Clinica criarClinica(Clinica clinica){return save(clinica);}
 }

@@ -9,8 +9,9 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-@Entity(name = "Solicitacao")
-@Table(name = "Solicitacao")
+@Entity
+@Table(uniqueConstraints = {
+    @UniqueConstraint(name = "OfertaAtivaComMesmoPetETipoExame", columnNames = { "pet_id", "tipo_exame", "estaAtiva" }) })
 public class Solicitacao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +21,8 @@ public class Solicitacao {
     @JoinColumn(name = "clinica_cnpj")
     private Clinica clinica;
 
-    @Embedded
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "pet_id")
     private Pet pet;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,8 +33,9 @@ public class Solicitacao {
     @JoinColumn(name = "plano_cnpj")
     private PlanoVeterinario plano;
 
-    @Column
     private LocalDateTime momentoCriacao;
+
+    private Boolean estaAtiva;
 
     @Transient
     private OfertaAtendimento ofertaAtual;
@@ -43,5 +46,6 @@ public class Solicitacao {
         this.exameSolicitado = exameSolicitado;
         this.plano = plano;
         this.momentoCriacao = LocalDateTime.now();
+        this.estaAtiva = Boolean.TRUE;
     }
 }
