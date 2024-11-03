@@ -6,9 +6,14 @@ import br.com.vetvision.supervisor.domain.model.solicitacao.Clinica;
 import br.com.vetvision.supervisor.domain.model.solicitacao.Pet;
 import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 
+import java.util.List;
+
 public interface AtendimentoService {
 
     Solicitacao solicitarExame(SolicitacaoDTO solicitacao);
+
+    Solicitacao consultarSolicitacao(Integer solicitacaoId);
+    List<Solicitacao> consultarSolicitacoes(String cnpjClinica);
 
     Exame aceitarOferta(OfertaAtendimento ofertaAtendimento);
 

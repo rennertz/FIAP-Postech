@@ -29,7 +29,7 @@ public class Solicitacao {
     @JoinColumn(name = "tipo_exame")
     private TipoExame exameSolicitado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "plano_cnpj")
     private PlanoVeterinario plano;
 
@@ -39,6 +39,9 @@ public class Solicitacao {
 
     @Transient
     private OfertaAtendimento ofertaAtual;
+
+    public Solicitacao() {
+    }
 
     public Solicitacao(Clinica clinica, Pet pet, TipoExame exameSolicitado, PlanoVeterinario plano) {
         this.clinica = clinica;

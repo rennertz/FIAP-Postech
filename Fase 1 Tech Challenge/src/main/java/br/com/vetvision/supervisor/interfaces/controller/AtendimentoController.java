@@ -8,10 +8,9 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/solicitacao")
@@ -54,5 +53,15 @@ public class AtendimentoController {
         }))
     public Solicitacao criaSolicitacao(@RequestBody SolicitacaoDTO body) {
         return atendimentoService.solicitarExame(body);
+    }
+
+    @GetMapping("/{id}")
+    public Solicitacao getSolicitacao(@PathVariable Integer id) {
+        return atendimentoService.consultarSolicitacao(id);
+    }
+
+    @GetMapping
+    public List<Solicitacao> listaSolicitacoes(@RequestParam String clinicaCnpj) {
+        return atendimentoService.consultarSolicitacoes(clinicaCnpj);
     }
 }

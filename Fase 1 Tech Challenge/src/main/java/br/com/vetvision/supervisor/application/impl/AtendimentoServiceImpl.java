@@ -13,6 +13,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AtendimentoServiceImpl implements AtendimentoService {
 
@@ -52,13 +54,28 @@ public class AtendimentoServiceImpl implements AtendimentoService {
                 .findAny()
                 .orElseThrow(() -> new ExcecaoDeSistema(HttpStatus.BAD_REQUEST,"Exame não atendido pelo plano selecionado"));
 
+
         Solicitacao solicitacao = new Solicitacao(clinica, pet, tipoExame, plano);
 
         try {
-            return solicitacaoRepository.criaSolicitacao(solicitacao);
+            Solicitacao criada = solicitacaoRepository.cria(solicitacao);
+            // TODO mockar serviço de notificação de nova solicitação aos consultores
+            return criada;
         } catch (DataIntegrityViolationException e) {
             throw new ExcecaoDeSistema(HttpStatus.BAD_REQUEST,"Solicitação para este exame já realizada para o pet.");
         }
+    }
+
+    @Override
+    public Solicitacao consultarSolicitacao(Integer solicitacaoId) {
+        return solicitacaoRepository.consultaPorId(solicitacaoId)
+            .orElseThrow(() -> new ExcecaoDeSistema(
+                HttpStatus.NOT_FOUND, "A solicitacao requisitada não foi encontrada."));
+    }
+
+    @Override
+    public List<Solicitacao> consultarSolicitacoes(String cnpjClinica) {
+        return solicitacaoRepository.consultaPorClinica(cnpjClinica);
     }
 
     @Override

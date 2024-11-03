@@ -4,10 +4,25 @@ import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 import br.com.vetvision.supervisor.domain.model.solicitacao.SolicitacaoRepository;
 import org.springframework.data.repository.CrudRepository;
 
-public interface SolicitacaoRepositoryJPA extends CrudRepository<Solicitacao, Long>, SolicitacaoRepository {
+import java.util.List;
+import java.util.Optional;
+
+public interface SolicitacaoRepositoryJPA extends CrudRepository<Solicitacao, Integer>, SolicitacaoRepository {
 
     @Override
-    default Solicitacao criaSolicitacao(Solicitacao solicitacao) {
+    default Solicitacao cria(Solicitacao solicitacao) {
         return save(solicitacao);
     }
+
+    @Override
+    default Optional<Solicitacao> consultaPorId(Integer solicitacaoId) {
+        return findById(solicitacaoId);
+    }
+
+    @Override
+    default List<Solicitacao> consultaPorClinica(String clinicaCnpj) {
+        return findByClinicaCnpj(clinicaCnpj);
+    }
+
+    List<Solicitacao> findByClinicaCnpj(String clinicaCnpj);
 }
