@@ -1,9 +1,7 @@
 package br.com.vetvision.supervisor.interfaces.controller;
 
 import br.com.vetvision.supervisor.application.AtendimentoService;
-import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinario;
-import br.com.vetvision.supervisor.domain.model.solicitacao.Clinica;
-import br.com.vetvision.supervisor.domain.model.solicitacao.Pet;
+import br.com.vetvision.supervisor.application.AtendimentoService.SolicitacaoDTO;
 import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -20,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "1. Atendimento", description = "Atendimento na visao da Clinica")
 public class AtendimentoController {
 
-    private static final String SOLICITACAO_EXEMPLO = """
+    static final String SOLICITACAO_EXEMPLO = """
             {
               "clinica": {
                 "cnpj": "00.000.000/0001-01",
@@ -35,13 +33,8 @@ public class AtendimentoController {
                 "nomeResponsavel": "Responsavel Mock",
                 "cpfResponsavel": "000.000.001-01"
               },
-              "plano": {
-                "cnpj": "00.000.000/0002-02",
-                "nome": "Plano mock",
-                "examesCobertos": [
-                  {}
-                ]
-              }
+              "tipoExame": "Ultrassom Gato",
+              "cnpjPlano": "00.000.000/0000-01"
             }
             """;
 
@@ -60,9 +53,6 @@ public class AtendimentoController {
                 @ExampleObject(name = "Solicitacao exemplo", value = SOLICITACAO_EXEMPLO),
         }))
     public Solicitacao criaSolicitacao(@RequestBody SolicitacaoDTO body) {
-        Solicitacao solicitacao = new Solicitacao(body.clinica, body.pet, body.plano);
-        return atendimentoService.solicitarExame(solicitacao);
+        return atendimentoService.solicitarExame(body);
     }
-
-    public record SolicitacaoDTO(Clinica clinica, Pet pet, PlanoVeterinario plano) {}
 }

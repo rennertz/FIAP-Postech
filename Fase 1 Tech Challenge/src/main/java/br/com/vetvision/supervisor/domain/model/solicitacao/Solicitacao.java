@@ -2,12 +2,13 @@ package br.com.vetvision.supervisor.domain.model.solicitacao;
 
 import br.com.vetvision.supervisor.domain.model.oferta.OfertaAtendimento;
 import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinario;
+import br.com.vetvision.supervisor.domain.model.plano.TipoExame;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
 @Entity(name = "Solicitacao")
 @Table(name = "Solicitacao")
 public class Solicitacao {
@@ -15,8 +16,6 @@ public class Solicitacao {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Getter
-    @Setter
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "clinica_cnpj")
     private Clinica clinica;
@@ -24,29 +23,25 @@ public class Solicitacao {
     @Embedded
     private Pet pet;
 
-    // TODO: remover cascade e salvar com servico proprio
-    @Getter
-    @Setter
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipo_exame")
+    private TipoExame exameSolicitado;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plano_cnpj")
     private PlanoVeterinario plano;
 
-    @Getter
     @Column
     private LocalDateTime momentoCriacao;
 
-    @Getter
     @Transient
     private OfertaAtendimento ofertaAtual;
 
-    public Solicitacao(Clinica clinica, Pet pet, PlanoVeterinario plano) {
+    public Solicitacao(Clinica clinica, Pet pet, TipoExame exameSolicitado, PlanoVeterinario plano) {
         this.clinica = clinica;
         this.pet = pet;
+        this.exameSolicitado = exameSolicitado;
         this.plano = plano;
+        this.momentoCriacao = LocalDateTime.now();
     }
-
-    public int getId() {
-        return id;
-    }
-
 }

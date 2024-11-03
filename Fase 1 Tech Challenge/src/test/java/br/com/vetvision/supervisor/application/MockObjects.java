@@ -1,9 +1,11 @@
 package br.com.vetvision.supervisor.application;
 
 import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinario;
+import br.com.vetvision.supervisor.domain.model.plano.TipoExame;
 import br.com.vetvision.supervisor.domain.model.solicitacao.Clinica;
 import br.com.vetvision.supervisor.domain.model.solicitacao.Pet;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public interface MockObjects {
@@ -23,4 +25,6 @@ public interface MockObjects {
     PlanoVeterinario mockPlano = new PlanoVeterinario(
             "00.000.000/0002-02",
             "Plano mock");
+
+    TipoExame mockExame = new TipoExame("Ultrassom Gato", BigDecimal.valueOf(59.99), 0.15);
 }

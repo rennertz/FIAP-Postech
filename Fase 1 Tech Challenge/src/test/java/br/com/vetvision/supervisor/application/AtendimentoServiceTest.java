@@ -1,13 +1,13 @@
 package br.com.vetvision.supervisor.application;
 
+import br.com.vetvision.supervisor.application.AtendimentoService.SolicitacaoDTO;
 import br.com.vetvision.supervisor.application.impl.AtendimentoServiceImpl;
+import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinario;
 import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinarioRepository;
 import br.com.vetvision.supervisor.domain.model.solicitacao.ClinicaRepository;
-import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 import br.com.vetvision.supervisor.domain.model.solicitacao.SolicitacaoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 
 import java.util.Optional;
@@ -49,8 +49,11 @@ class AtendimentoServiceTest {
 
     @Test
     void solicitarExamePlanoExistesteTest() {
-        Solicitacao solicitacao = new Solicitacao(mockClinica, mockPet, mockPlano);
-        when(planoVeterinarioRepository.planoExiste(mockPlano.getCnpj())).thenReturn(Optional.of(mockPlano));
+        PlanoVeterinario planoComExame = mockPlano;
+        planoComExame.adicionaExameCoberto(mockExame);
+        when(planoVeterinarioRepository.planoExiste(mockPlano.getCnpj())).thenReturn(Optional.of(planoComExame));
+
+        SolicitacaoDTO solicitacao = new SolicitacaoDTO(mockClinica, mockPet, "Ultrassom Gato", mockPlano.getCnpj());
         assertDoesNotThrow(()->service.solicitarExame(solicitacao));
     }
 

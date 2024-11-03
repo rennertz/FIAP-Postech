@@ -1,18 +1,19 @@
 package br.com.vetvision.supervisor.application.impl;
 
 import br.com.vetvision.supervisor.application.AtendimentoService;
+import br.com.vetvision.supervisor.application.exceptions.ExcecaoDeSistema;
 import br.com.vetvision.supervisor.domain.model.exame.Exame;
 import br.com.vetvision.supervisor.domain.model.oferta.OfertaAtendimento;
 import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinario;
 import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinarioRepository;
+import br.com.vetvision.supervisor.domain.model.plano.TipoExame;
 import br.com.vetvision.supervisor.domain.model.solicitacao.Clinica;
 import br.com.vetvision.supervisor.domain.model.solicitacao.ClinicaRepository;
 import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 import br.com.vetvision.supervisor.domain.model.solicitacao.SolicitacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AtendimentoServiceImpl implements AtendimentoService {
@@ -28,34 +29,28 @@ public class AtendimentoServiceImpl implements AtendimentoService {
         this.planoVeterinarioRepository = planoVeterinarioRepository;
     }
 
+    // TODO Impedir a duplicação de solicitação no mesmo dia
+    // TODO ocultar exames cobertos pelo plano
     @Override
-    public Solicitacao solicitarExame(Solicitacao solicitacao) {
+    public Solicitacao solicitarExame(SolicitacaoDTO solicitacaoDTO) {
 
-        //verifica se a clinica existe antes de criar uma nova
-        Clinica clinica = clinicaRepository.clinicaExiste(solicitacao.getClinica().getCnpj())
-                .orElseGet(()-> clinicaRepository.criarClinica(solicitacao.getClinica()));
+        // verifica se a clínica existe, antes de criar uma nova
+        Clinica clinica = clinicaRepository.clinicaExiste(solicitacaoDTO.clinica().getCnpj())
+                .orElseGet(()-> clinicaRepository.criarClinica(solicitacaoDTO.clinica()));
 
-        solicitacao.setClinica(clinica);
+        // Verifica se o plano existe. Caso não, lança exceção
+        PlanoVeterinario plano = planoVeterinarioRepository.planoExiste(solicitacaoDTO.cnpjPlano())
+                .orElseThrow(()-> new ExcecaoDeSistema(HttpStatus.BAD_REQUEST,"Plano não cadastrado no sistema"));
 
-        //verifica se o plano existe, caso não: lanca erro
-        PlanoVeterinario plano = planoVeterinarioRepository.planoExiste(solicitacao.getPlano().getCnpj())
-                .orElseThrow(()-> new RuntimeException("Plano não cadastrado no sistema"));
+        // Verifica se o exame é atendido pelo plano. Caso não, lança exceção
+        TipoExame tipoExame = plano.getExamesCobertos().stream()
+                .filter(exame -> exame.getNome().equalsIgnoreCase(solicitacaoDTO.tipoExame()))
+                .findAny()
+                .orElseThrow(() -> new ExcecaoDeSistema(HttpStatus.BAD_REQUEST,"Exame não atendido pelo plano selecionado"));
 
+        Solicitacao solicitacao = new Solicitacao(clinica, solicitacaoDTO.pet(), tipoExame, plano);
         return solicitacaoRepository.criaSolicitacao(solicitacao);
-
     }
-
-    private void verificaSolicitacao(Solicitacao solicitacao) {
-        //verifica se a clinica existe antes de criar uma nova
-
-
-        //verifica se o plano existe antes de criar um novo
-        PlanoVeterinario plano = planoVeterinarioRepository.planoExiste(solicitacao.getPlano().getCnpj())
-                .orElseGet(()-> planoVeterinarioRepository.criarPlano(solicitacao.getPlano()));
-
-        solicitacao.setPlano(plano);
-    }
-
 
     @Override
     public Exame aceitarOferta(OfertaAtendimento ofertaAtendimento) {

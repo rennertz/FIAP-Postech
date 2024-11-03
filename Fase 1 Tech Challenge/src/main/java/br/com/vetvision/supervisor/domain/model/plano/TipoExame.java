@@ -27,6 +27,15 @@ public class TipoExame {
     @ManyToMany(mappedBy = "examesCobertos")
     private List<PlanoVeterinario> planosQueCobrem;
 
+    public TipoExame() {
+    }
+
+    public TipoExame(String nome, BigDecimal valor, double comissao) {
+        this.nome = nome;
+        this.valor = valor;
+        this.comissao = comissao;
+    }
+
     void sanitizaNomeExame() {
         this.nome = this.nome.toUpperCase();
     }
