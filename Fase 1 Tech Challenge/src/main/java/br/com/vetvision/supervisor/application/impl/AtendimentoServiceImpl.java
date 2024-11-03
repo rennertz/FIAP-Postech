@@ -22,19 +22,21 @@ public class AtendimentoServiceImpl implements AtendimentoService {
     private final ClinicaRepository clinicaRepository;
     private final PetReadOnlyRepository petRepository;
     private final PlanoVeterinarioRepository planoVeterinarioRepository;
+    private final SolicitacaoMapper solicitacaoMapper;
 
     @Autowired
     public AtendimentoServiceImpl(SolicitacaoRepository solicitacaoRepository, ClinicaRepository clinicaRepository,
-                                  PetReadOnlyRepository petRepository, PlanoVeterinarioRepository planoRepository) {
+                                  PetReadOnlyRepository petRepository, PlanoVeterinarioRepository planoRepository,
+                                  SolicitacaoMapper solicitacaoMapper) {
         this.solicitacaoRepository = solicitacaoRepository;
         this.clinicaRepository = clinicaRepository;
         this.petRepository = petRepository;
         this.planoVeterinarioRepository = planoRepository;
+        this.solicitacaoMapper = solicitacaoMapper;
     }
 
-    // TODO ocultar exames cobertos pelo plano
     @Override
-    public Solicitacao solicitarExame(SolicitacaoDTO solicitacaoDTO) {
+    public SolicitacaoDTO solicitarExame(NovaSolicitacaoDTO solicitacaoDTO) {
 
         // verifica se a clínica existe, antes de criar uma nova
         Clinica clinica = clinicaRepository.clinicaExiste(solicitacaoDTO.clinica().getCnpj())
@@ -45,7 +47,7 @@ public class AtendimentoServiceImpl implements AtendimentoService {
                 .orElse(solicitacaoDTO.pet());
 
         // Verifica se o plano existe. Caso não, lança exceção
-        PlanoVeterinario plano = planoVeterinarioRepository.planoExiste(solicitacaoDTO.cnpjPlano())
+        PlanoVeterinario plano = planoVeterinarioRepository.planoExiste(solicitacaoDTO.planoCnpj())
                 .orElseThrow(()-> new ExcecaoDeSistema(HttpStatus.BAD_REQUEST,"Plano não cadastrado no sistema"));
 
         // Verifica se o exame é atendido pelo plano. Caso não, lança exceção
@@ -59,8 +61,10 @@ public class AtendimentoServiceImpl implements AtendimentoService {
 
         try {
             Solicitacao criada = solicitacaoRepository.cria(solicitacao);
-            // TODO mockar serviço de notificação de nova solicitação aos consultores
-            return criada;
+            // TODO mock serviço de notificação de nova solicitação aos consultores
+
+            PlanoResumidoDTO planoResumido = solicitacaoMapper.toPlanoResumido(criada.getPlano());
+            return solicitacaoMapper.toSolicitacaoDto(criada, planoResumido);
         } catch (DataIntegrityViolationException e) {
             throw new ExcecaoDeSistema(HttpStatus.BAD_REQUEST,"Solicitação para este exame já realizada para o pet.");
         }

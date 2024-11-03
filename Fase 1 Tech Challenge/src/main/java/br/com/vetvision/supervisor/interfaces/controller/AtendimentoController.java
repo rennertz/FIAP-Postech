@@ -1,6 +1,7 @@
 package br.com.vetvision.supervisor.interfaces.controller;
 
 import br.com.vetvision.supervisor.application.AtendimentoService;
+import br.com.vetvision.supervisor.application.AtendimentoService.NovaSolicitacaoDTO;
 import br.com.vetvision.supervisor.application.AtendimentoService.SolicitacaoDTO;
 import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,7 +34,7 @@ public class AtendimentoController {
                 "cpfResponsavel": "000.000.001-01"
               },
               "tipoExame": "Ultrassom Gato",
-              "cnpjPlano": "00.000.000/0000-01"
+              "planoCnpj": "00.000.000/0000-01"
             }
             """;
 
@@ -48,10 +49,10 @@ public class AtendimentoController {
     @PostMapping
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content =
         @Content(mediaType = "application/json", schema =
-        @Schema(implementation = SolicitacaoDTO.class), examples = {
+        @Schema(implementation = NovaSolicitacaoDTO.class), examples = {
                 @ExampleObject(name = "Solicitacao exemplo", value = SOLICITACAO_EXEMPLO),
         }))
-    public Solicitacao criaSolicitacao(@RequestBody SolicitacaoDTO body) {
+    public SolicitacaoDTO criaSolicitacao(@RequestBody NovaSolicitacaoDTO body) {
         return atendimentoService.solicitarExame(body);
     }
 
