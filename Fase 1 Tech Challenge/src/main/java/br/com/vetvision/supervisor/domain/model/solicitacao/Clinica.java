@@ -2,19 +2,25 @@ package br.com.vetvision.supervisor.domain.model.solicitacao;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 @Getter
 @Entity
 public class Clinica {
 
     @Id
+    @CNPJ
     private String cnpj;
 
+    @NotBlank
     private String nome;
 
     private String endereco;
 
+    @Pattern(regexp = "\\d\\d \\d{5}-\\d{4}")
     private String contato;   // para notificação
 
     public Clinica(String cnpj, String nome, String endereco, String contato) {

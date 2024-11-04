@@ -4,6 +4,7 @@ import br.com.vetvision.supervisor.domain.model.oferta.OfertaAtendimento;
 import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinario;
 import br.com.vetvision.supervisor.domain.model.plano.TipoExame;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -43,7 +44,7 @@ public class Solicitacao {
     public Solicitacao() {
     }
 
-    public Solicitacao(Clinica clinica, Pet pet, TipoExame exameSolicitado, PlanoVeterinario plano) {
+    public Solicitacao(@Valid Clinica clinica, Pet pet, TipoExame exameSolicitado, PlanoVeterinario plano) {
         this.clinica = clinica;
         this.pet = pet;
         this.exameSolicitado = exameSolicitado;

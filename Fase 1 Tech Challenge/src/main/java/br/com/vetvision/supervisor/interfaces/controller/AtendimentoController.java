@@ -21,7 +21,7 @@ public class AtendimentoController {
     static final String SOLICITACAO_EXEMPLO = """
             {
               "clinica": {
-                "cnpj": "00.000.000/0001-01",
+                "cnpj": "17.632.183/0001-60",
                 "nome": "Clinica Mock",
                 "endereco": "Rua Mock, No 0",
                 "contato": "01 00000-0001"
@@ -31,10 +31,10 @@ public class AtendimentoController {
                 "especie": "Gato",
                 "dataNascimento": "2024-01-01",
                 "nomeResponsavel": "Responsavel Mock",
-                "cpfResponsavel": "000.000.001-01"
+                "cpfResponsavel": "404.446.980-60"
               },
               "tipoExame": "Ultrassom Gato",
-              "planoCnpj": "00.000.000/0000-01"
+              "planoCnpj": "17.048.004/0001-42"
             }
             """;
 

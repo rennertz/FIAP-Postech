@@ -1,5 +1,6 @@
 package br.com.vetvision.supervisor.application.exceptions;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.java.Log;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.stream.Collectors;
 
 /**
  * Captura com precedência sobre captura genérica. Trata erros específicos
@@ -25,6 +28,27 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(ex, mensagemErro,
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
+    @ExceptionHandler(value = { ConstraintViolationException.class })
+    protected ResponseEntity<Object> handleValidationException(ConstraintViolationException ex, WebRequest request) {
+        ex.printStackTrace();
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        MensagemErro mensagemErro = new MensagemErro(
+                badRequest.value(), badRequest.getReasonPhrase(),
+                getViolations(ex));
+
+        return handleExceptionInternal(ex, mensagemErro,
+                new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
+
+    private static String getViolations(ConstraintViolationException ex) {
+        return ex.getConstraintViolations().stream()
+                .map(violation -> String.format("%s.%s: %s",
+                        violation.getRootBeanClass().getSimpleName(),
+                        violation.getPropertyPath(),
+                        violation.getMessage()))
+                .collect(Collectors.joining(", "));
     }
 
     @ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class })
