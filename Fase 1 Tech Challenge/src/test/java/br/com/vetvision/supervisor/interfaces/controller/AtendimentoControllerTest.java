@@ -9,6 +9,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static br.com.vetvision.supervisor.interfaces.controller.AtendimentoController.SOLICITACAO_EXEMPLO;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -30,5 +31,16 @@ class AtendimentoControllerTest {
                 .when().post("/solicitacao")
                 .then()
                 .statusCode(200);
+    }
+
+    @Test
+    void criaSolicitacaoVaziaValidationTest() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("")
+                .when().post("/solicitacao")
+                .then()
+                .statusCode(400);
+//                .body(equalTo(""));
     }
 }

@@ -9,3 +9,4 @@
 dataSources.xml
 remote-targets.xml
 compiler.xml
+httpClient.xml

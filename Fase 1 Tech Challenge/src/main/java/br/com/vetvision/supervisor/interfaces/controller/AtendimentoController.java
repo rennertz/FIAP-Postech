@@ -8,6 +8,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.br.CNPJ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,17 +56,17 @@ public class AtendimentoController {
         @Schema(implementation = NovaSolicitacaoDTO.class), examples = {
                 @ExampleObject(name = "Solicitacao exemplo", value = SOLICITACAO_EXEMPLO),
         }))
-    public SolicitacaoDTO criaSolicitacao(@RequestBody NovaSolicitacaoDTO body) {
+    public SolicitacaoDTO criaSolicitacao(@Valid @RequestBody NovaSolicitacaoDTO body) {
         return atendimentoService.solicitarExame(body);
     }
 
     @GetMapping("/{id}")
-    public Solicitacao getSolicitacao(@PathVariable Integer id) {
+    public Solicitacao getSolicitacao(@NotNull @Min(1) @PathVariable Integer id) {
         return atendimentoService.consultarSolicitacao(id);
     }
 
     @GetMapping
-    public List<Solicitacao> listaSolicitacoes(@RequestParam String clinicaCnpj) {
+    public List<Solicitacao> listaSolicitacoes(@CNPJ @RequestParam String clinicaCnpj) {
         return atendimentoService.consultarSolicitacoes(clinicaCnpj);
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface AdminService {
-    PlanoVeterinario adicionaPlano(@Valid PlanoVeterinarioDTO planoVeterinarioDTO);
+    PlanoVeterinario adicionaPlano(PlanoVeterinarioDTO planoVeterinarioDTO);
 
     List<PlanoVeterinarioExamesSimplesDTO> listaPlanos();
 

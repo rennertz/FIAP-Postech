@@ -17,17 +17,17 @@ import java.util.List;
 
 public interface AtendimentoService {
 
-    SolicitacaoDTO solicitarExame(@Valid NovaSolicitacaoDTO solicitacao);
+    SolicitacaoDTO solicitarExame(NovaSolicitacaoDTO solicitacao);
 
-    Solicitacao consultarSolicitacao(@NotNull @Min(1) Integer solicitacaoId);
-    List<Solicitacao> consultarSolicitacoes(@NotBlank @CNPJ String cnpjClinica);
+    Solicitacao consultarSolicitacao(Integer solicitacaoId);
+    List<Solicitacao> consultarSolicitacoes(String cnpjClinica);
 
     Exame aceitarOferta(OfertaAtendimento ofertaAtendimento);
 
     record NovaSolicitacaoDTO(
-            @Valid Clinica clinica,
-            @Valid Pet pet,
-            @NotBlank String tipoExame,
+            @NotNull @Valid Clinica clinica,
+            @NotNull @Valid Pet pet,
+            @NotNull @NotBlank String tipoExame,
             @NotBlank @CNPJ String planoCnpj) {}
     record SolicitacaoDTO(Clinica clinica, Pet pet, TipoExame exameSolicitado, PlanoResumidoDTO planoSelecionado,
                           Boolean estaAtiva, LocalDateTime momentoCriacao, OfertaAtendimento ofertaAtual) {}
