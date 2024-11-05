@@ -28,7 +28,7 @@ class AdminControllerTest {
             .get("/admin/planos")
             .then()
             .statusCode(200)
-            .body("[0].cnpj", equalTo("00.000.000/0000-01"))
+            .body("[0].cnpj", equalTo("17.048.004/0001-42"))
             .body("[0].nome", equalTo("Particular"));
     }
 }

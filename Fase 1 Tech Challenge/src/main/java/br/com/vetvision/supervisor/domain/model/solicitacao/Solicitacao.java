@@ -5,6 +5,8 @@ import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinario;
 import br.com.vetvision.supervisor.domain.model.plano.TipoExame;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -20,22 +22,29 @@ public class Solicitacao {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "clinica_cnpj")
+    @NotNull
     private Clinica clinica;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "pet_id")
+    @NotNull
     private Pet pet;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo_exame")
+    @NotNull
     private TipoExame exameSolicitado;
 
     @ManyToOne
     @JoinColumn(name = "plano_cnpj")
+    @NotNull
     private PlanoVeterinario plano;
 
+    @Past
+    @NotNull
     private LocalDateTime momentoCriacao;
 
+    @NotNull
     private Boolean estaAtiva;
 
     @Transient
@@ -44,7 +53,7 @@ public class Solicitacao {
     public Solicitacao() {
     }
 
-    public Solicitacao(@Valid Clinica clinica, Pet pet, TipoExame exameSolicitado, PlanoVeterinario plano) {
+    public Solicitacao(@Valid Clinica clinica, @Valid Pet pet, @Valid TipoExame exameSolicitado, @Valid PlanoVeterinario plano) {
         this.clinica = clinica;
         this.pet = pet;
         this.exameSolicitado = exameSolicitado;

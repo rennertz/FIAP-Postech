@@ -13,14 +13,16 @@ public class Clinica {
 
     @Id
     @CNPJ
+    @NotBlank
     private String cnpj;
 
     @NotBlank
     private String nome;
 
+    @NotBlank
     private String endereco;
 
-    @Pattern(regexp = "\\d\\d \\d{5}-\\d{4}")
+    @Pattern(regexp = "\\d\\d \\d{5}-\\d{4}", message = "telefone no formato 'XX XXXXX-XXXX'")
     private String contato;   // para notificação
 
     public Clinica(String cnpj, String nome, String endereco, String contato) {

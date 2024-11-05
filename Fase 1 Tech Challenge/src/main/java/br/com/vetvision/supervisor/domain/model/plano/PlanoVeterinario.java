@@ -1,8 +1,13 @@
 package br.com.vetvision.supervisor.domain.model.plano;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +19,12 @@ import java.util.List;
 public class PlanoVeterinario {
 
     @Id
+    @CNPJ
+    @NotBlank
     private String cnpj;
 
     @Column
+    @NotBlank
     private String nome;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -24,6 +32,8 @@ public class PlanoVeterinario {
             name = "plano_exame",
             joinColumns = @JoinColumn(name = "cnpj"),
             inverseJoinColumns = @JoinColumn(name = "nome"))
+    @NotNull
+    @Size(min = 1)
     private List<TipoExame> examesCobertos = new ArrayList<>();
 
     public PlanoVeterinario() {
@@ -34,7 +44,7 @@ public class PlanoVeterinario {
         this.nome = nome;
     }
 
-    public void adicionaExameCoberto(TipoExame exame) {
+    public void adicionaExameCoberto(@Valid TipoExame exame) {
         exame.sanitizaNomeExame();
         examesCobertos.add(exame);
     }
