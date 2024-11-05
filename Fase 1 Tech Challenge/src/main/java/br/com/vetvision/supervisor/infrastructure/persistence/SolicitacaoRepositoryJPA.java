@@ -1,5 +1,6 @@
 package br.com.vetvision.supervisor.infrastructure.persistence;
 
+import br.com.vetvision.supervisor.domain.model.oferta.OfertaAtendimento;
 import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 import br.com.vetvision.supervisor.domain.model.solicitacao.SolicitacaoRepository;
 import org.springframework.data.repository.CrudRepository;
@@ -25,4 +26,15 @@ public interface SolicitacaoRepositoryJPA extends CrudRepository<Solicitacao, In
     }
 
     List<Solicitacao> findByClinicaCnpj(String clinicaCnpj);
+
+    default void mudaOferta(Integer idSolicitacao, OfertaAtendimento novaOferta){
+        var solicitacao = findById(idSolicitacao).get();
+        solicitacao.setOfertaAtual(novaOferta);
+        save(solicitacao);
+    };
+
+    @Override
+    default OfertaAtendimento aceitaOferta(Solicitacao solicitacao){
+        return save(solicitacao).getOfertaAtual();
+    };
 }

@@ -38,13 +38,13 @@ class AtendimentoServiceTest {
 //    @Test
 //    void solicitarExameTest() {
 //        ArgumentCaptor<Solicitacao> requestCaptor = ArgumentCaptor.forClass(Solicitacao.class);
-//        Solicitacao solicitacao = new Solicitacao(mockClinica, mockPet, mockPlano);
+//        Solicitacao id = new Solicitacao(mockClinica, mockPet, mockPlano);
 //        Solicitacao solicitacaoResposta = new Solicitacao(mockClinica, mockPet, mockPlano);
 //
 //        when(planoVeterinarioRepository.planoExiste(mockPlano.getCnpj())).thenReturn(Optional.of(mockPlano));
 //        verify(solicitacaoRepository).criaSolicitacao(requestCaptor.capture());
-//        when(solicitacaoRepository.criaSolicitacao(solicitacao)).thenReturn(solicitacaoResposta);
-//        Solicitacao resultado = service.solicitarExame(solicitacao);
+//        when(solicitacaoRepository.criaSolicitacao(id)).thenReturn(solicitacaoResposta);
+//        Solicitacao resultado = service.solicitarExame(id);
 //
 //        Solicitacao solicitacaoTeste = requestCaptor.getValue();
 //        assertNotNull(resultado.getMomentoCriacao());
