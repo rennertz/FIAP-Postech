@@ -3,6 +3,7 @@ package br.com.vetvision.supervisor.application.impl;
 import br.com.vetvision.supervisor.application.ProvimentoService;
 import br.com.vetvision.supervisor.application.exceptions.ExcecaoDeSistema;
 import br.com.vetvision.supervisor.domain.model.exame.Exame;
+import br.com.vetvision.supervisor.domain.model.exame.ExameRepository;
 import br.com.vetvision.supervisor.domain.model.oferta.OfertaAtendimento;
 import br.com.vetvision.supervisor.domain.model.solicitacao.Solicitacao;
 import br.com.vetvision.supervisor.domain.model.solicitacao.SolicitacaoRepository;
@@ -17,6 +18,9 @@ public class ProvimentoServiceImpl implements ProvimentoService {
 
     @Autowired
     private SolicitacaoRepository solicitacaoRepository;
+
+    @Autowired
+    private ExameRepository exameRepository;
 
     @Override
     public OfertaConsultorDTO ofertarAtendimento(OfertaConsultorDTO novaOferta) {
@@ -61,6 +65,10 @@ public class ProvimentoServiceImpl implements ProvimentoService {
         ofertaAtual.aceitarOferta();
         solicitacao.setOfertaAtual(ofertaAtual);
 
+        var codigo = exameRepository.criarExame(solicitacao).codigoDeConfirmacao();
+
+        System.out.println("Oferta do Consultor de cpf: " + solicitacao.getOfertaAtual().getConsultor().getCpf() + ", foi aceita!" );
+        System.out.println("Codigo para atendimento do exame: " + codigo);
         return solicitacaoRepository.aceitaOferta(solicitacao);
     }
 
@@ -73,12 +81,20 @@ public class ProvimentoServiceImpl implements ProvimentoService {
     private OfertaConsultorDTO mudarOfertaAtual(OfertaConsultorDTO oferta, Solicitacao solicitacao) {
         OfertaAtendimento ofertaNova = new OfertaAtendimento(oferta.consultor(), oferta.prazo(), null);
         solicitacaoRepository.mudaOferta(solicitacao.getId(), ofertaNova);
+        System.out.println("Clinica de cnpj: " +solicitacao.getClinica().getCnpj() + " recebeu uma oferta nova melhor!");
         return new OfertaConsultorDTO(solicitacao.getId(), ofertaNova.getConsultor(), ofertaNova.getPrazoParaAtendimento(), true);
     }
 
     @Override
-    public Exame realizarExame(Exame exame) {
-        return null;
+    public Exame realizarExame(String codigo) {
+        var exame = exameRepository.exameExiste(codigo)
+                .orElseThrow(()-> new ExcecaoDeSistema(HttpStatus.NOT_FOUND, "Solicitação não existe para realizar exame!"));
+        var exameRealizado = exame.getMomentoAtendimento() != null;
+
+        if(exameRealizado)
+            throw new ExcecaoDeSistema(HttpStatus.BAD_REQUEST, "Exame já foi realizado!");
+
+        return exameRepository.realizarAtendimento(exame);
     }
 
     @Override

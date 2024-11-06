@@ -38,17 +38,17 @@ public class OfertaController {
     @Schema(implementation = ProvimentoService.OfertaConsultorDTO.class), examples = {
             @ExampleObject(name = "Oferta exemplo", value = OFERTA_NOVA),
     }))
-    OfertaConsultorDTO aceitaOfertaAtual(@RequestBody OfertaConsultorDTO oferta){
+    OfertaConsultorDTO oferecerOferta(@RequestBody OfertaConsultorDTO oferta){
         return service.ofertarAtendimento(oferta);
     }
 
-    @PutMapping("/ofertaAtual/{id}")
-    OfertaAtendimento aceitaOfertaAtual(@PathVariable Integer id){
-        return service.aceitarOfertaAtual(id);
+    @PutMapping("/aceitarOferta/{solicitacaoId}")
+    OfertaAtendimento aceitaOfertaAtual(@PathVariable Integer solicitacaoId){
+        return service.aceitarOfertaAtual(solicitacaoId);
     }
 
-    @GetMapping("/ofertaAtual/{id}")
-    OfertaAtendimento pegarOfertaAtual(@PathVariable Integer id){
-        return service.buscarOfertaAtual(id);
+    @GetMapping("/pegarOfertaAtual/{solicitacaoId}")
+    OfertaAtendimento pegarOfertaAtual(@PathVariable Integer solicitacaoId){
+        return service.buscarOfertaAtual(solicitacaoId);
     }
 }

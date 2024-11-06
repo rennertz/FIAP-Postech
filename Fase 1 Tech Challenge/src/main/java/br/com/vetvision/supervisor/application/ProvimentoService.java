@@ -10,7 +10,7 @@ public interface ProvimentoService {
 
     OfertaConsultorDTO ofertarAtendimento(OfertaConsultorDTO ofertaConsultor);
 
-    Exame realizarExame(Exame exame);
+    Exame realizarExame(String codigo);
 
     Exame encaminharLaudo(Exame exame);
 
