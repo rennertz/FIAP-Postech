@@ -5,6 +5,7 @@ import br.com.vetvision.supervisor.domain.model.plano.PlanoVeterinario;
 import br.com.vetvision.supervisor.domain.model.plano.TipoExame;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -37,7 +38,8 @@ public class Solicitacao {
 
     private Boolean estaAtiva;
 
-    @Transient
+    @Embedded
+    @Setter
     private OfertaAtendimento ofertaAtual;
 
     public Solicitacao() {

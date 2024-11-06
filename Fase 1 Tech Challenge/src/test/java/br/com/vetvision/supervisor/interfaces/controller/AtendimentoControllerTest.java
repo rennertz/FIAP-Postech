@@ -27,7 +27,7 @@ class AtendimentoControllerTest {
         given()
                 .contentType(ContentType.JSON)
                 .body(SOLICITACAO_EXEMPLO)
-                .when().post("/solicitacao")
+                .when().post("/id")
                 .then()
                 .statusCode(200);
     }

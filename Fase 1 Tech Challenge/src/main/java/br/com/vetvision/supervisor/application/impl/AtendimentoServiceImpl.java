@@ -70,7 +70,7 @@ public class AtendimentoServiceImpl implements AtendimentoService {
     public Solicitacao consultarSolicitacao(Integer solicitacaoId) {
         return solicitacaoRepository.consultaPorId(solicitacaoId)
             .orElseThrow(() -> new ExcecaoDeSistema(
-                HttpStatus.NOT_FOUND, "A solicitacao requisitada não foi encontrada."));
+                HttpStatus.NOT_FOUND, "A id requisitada não foi encontrada."));
     }
 
     @Override
