@@ -1,5 +1,19 @@
 services:
-  supervisor:
+#  supervisor:
+#    build:
+#      context: ./fase1-vetvison/.
+#    container_name: vetvision-supervisor
+  parquimetro:
     build:
-      context: ./Fase 1 Tech Challenge/.
-    container_name: vetvision-supervisor
+      context: ./fase2-parquimetro/.
+    environment:
+      MONGO_HOSTNAME: admin
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017"
