@@ -46,3 +46,7 @@ jar {
 		attributes "Main-Class": "br.com.pixpark.parquimetro.ParquimetroApplication"
 	}
 }
+
+bootJar {
+	archiveFileName = 'app.jar'
+}
