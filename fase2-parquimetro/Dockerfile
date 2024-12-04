@@ -1,14 +1,26 @@
+#Build stage
+
+FROM gradle:latest AS buildstage
+WORKDIR /usr/app/
+COPY . .
+RUN gradle build
+
+# Package stage
+
 # Imagem base com JRE 21
 FROM eclipse-temurin:21-jre
 
-# Define o diretório de trabalho no container
-WORKDIR /app
+ENV JAR_NAME=app.jar
+ENV APP_HOME=/usr/app/
 
-# Copia o arquivo JAR já gerado localmente para o container
-COPY build/libs/*.jar app.jar
+# Define o diretório de trabalho no container
+WORKDIR $APP_HOME
+
+# Copia o arquivo JAR já gerado para o container
+COPY --from=buildstage $APP_HOME .
 
 # Exposição da porta 8080
 EXPOSE 8080
 
 # Comando para executar a aplicação
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT exec java -jar $APP_HOME/build/libs/$JAR_NAME
