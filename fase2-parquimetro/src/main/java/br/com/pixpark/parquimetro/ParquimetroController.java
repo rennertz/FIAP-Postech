@@ -1,11 +1,11 @@
 package br.com.pixpark.parquimetro;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -16,10 +16,24 @@ public class ParquimetroController {
 
     private record InfoPagamento(Double valor, Set<String> meioDePagamento) {};
 
+    private BilheteRepository repo;
+
+    @Autowired
+    public ParquimetroController(BilheteRepository repo){
+        this.repo = repo;
+    }
+
     @PostMapping
     public ResponseEntity<InfoPagamento> cadastraVeiculo(@RequestBody Bilhete req){
+        repo.save(req);
         InfoPagamento res = new InfoPagamento(req.pegarValor(),pagamentos );
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Bilhete>> listarBilhetes(){
+
+        return ResponseEntity.ok(repo.findAll());
     }
 
 }
