@@ -25,7 +25,11 @@ public class ParquimetroController {
 
     @PostMapping
     public ResponseEntity<InfoPagamento> cadastraVeiculo(@RequestBody Bilhete req){
+
+        //service.validar
+
         repo.save(req);
+
         InfoPagamento res = new InfoPagamento(req.pegarValor(),pagamentos );
         return ResponseEntity.ok(res);
     }
