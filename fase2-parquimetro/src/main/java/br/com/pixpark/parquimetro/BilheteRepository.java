@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface BilheteRepository extends MongoRepository<Bilhete, String> {
 
-
+    Bilhete findByPlaca(String placa);
 }

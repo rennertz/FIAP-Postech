@@ -4,17 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/cadastro")
+@RequestMapping("/bilhete")
 public class ParquimetroController {
 
     private static final Set<String> pagamentos =  Set.of("pix", "credito", "debito");
 
     private record InfoPagamento(Double valor, Set<String> meioDePagamento) {};
+
+    private record ReciboPagamento(String bilhete, Boolean recibo) {public ReciboPagamento {
+            recibo = true;
+    }};
 
     private BilheteRepository repo;
 
@@ -23,7 +26,7 @@ public class ParquimetroController {
         this.repo = repo;
     }
 
-    @PostMapping
+    @PostMapping("/cadastra")
     public ResponseEntity<InfoPagamento> cadastraVeiculo(@RequestBody Bilhete req){
 
         //service.validar
@@ -38,6 +41,26 @@ public class ParquimetroController {
     public ResponseEntity<List<Bilhete>> listarBilhetes(){
 
         return ResponseEntity.ok(repo.findAll());
+    }
+
+    @GetMapping("/{placa}")
+    public ResponseEntity<Bilhete> acharBilhete(@PathVariable String placa){
+
+        Bilhete res = repo.findByPlaca(placa);
+        return ResponseEntity.ok(res);
+    }
+
+    @PostMapping
+    public ResponseEntity pagarBilhete(@RequestBody ReciboPagamento req){
+
+        var bilhete = repo.findById(req.bilhete).orElseGet(null);
+
+        if(req.recibo()){
+            bilhete.setPago(true);
+            repo.save(bilhete);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 }

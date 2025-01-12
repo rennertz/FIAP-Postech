@@ -25,6 +25,7 @@ public class Bilhete{
     String placa;
     Duration tempo;
     LocalDateTime momentoDaSolicitacao = LocalDateTime.now();
+    Boolean pago = false;
 
     public Double pegarValor(){
        return TabelaPrecos.getPreco(tempo.toHours());
