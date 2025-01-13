@@ -14,7 +14,8 @@ public class TabelaPrecos {
             7, 66.00
     );
 
-    public static Double getPreco(long horas){
+    public static Double getPreco(long h){
+        int horas = (int) h;
         if (horas <= 7) {
             return PRECOS.getOrDefault(horas, 0.0);
         } else if (horas > 7 && horas <= 23) {
