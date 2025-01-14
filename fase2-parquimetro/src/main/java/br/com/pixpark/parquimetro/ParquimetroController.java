@@ -1,7 +1,6 @@
 package br.com.pixpark.parquimetro;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,23 +20,51 @@ import java.util.Set;
 @Tag(name="0. Compra de Bilhete")
 public class ParquimetroController {
 
-    private static final String CADASTRO_EXEMPLO = """
+    private static final Set<String> PAGAMENTOS =  Set.of("pix", "credito", "debito");
+    private static final String CADASTRO_REQUEST = """
             {
               "placa": "ABC-4321",
               "tempo": "PT2H"
             }
         """;
+    public static final String LISTA_DE_BILHETES_RESPONSE = """
+            [
+              {
+                "id": "x",
+                "placa": "z",
+                "tempo": "PT00H",
+                "momentoDaSolicitacao": "yyyy-MM-dd",
+                "pago": false
+              },
+              {
+                "id": "x",
+                "placa": "z",
+                "tempo": "PT00H",
+                "momentoDaSolicitacao": "yyyy-MM-dd",
+                "pago": true
+              }
+            ]
+        """;
+    public static final String BILHETE_RESPONSE = """
+            {
+              "id": "123",
+              "placa": "x",
+              "tempo": "PT0H",
+              "momentoDaSolicitacao": "yyyy-MM-dd",
+              "pago": false
+            }
+        """;
 
-    private static final Set<String> pagamentos =  Set.of("pix", "credito", "debito");
+    public record InfoPagamento(BigDecimal valor, Set<String> meioDePagamento) {}
 
-    private record InfoPagamento(BigDecimal valor, Set<String> meioDePagamento) {};
-
-    private record ReciboPagamento(String bilhete, Boolean recibo) {public ReciboPagamento {
+    public record ReciboPagamento(String bilhete, Boolean recibo) {
+        public ReciboPagamento {
             recibo = true;
-    }};
+        }
+    }
 
-    private BilheteRepository repo;
-    private TabelaPrecosService precoService = new TabelaPrecosService(new TabelaPrecos());
+    final private BilheteRepository repo;
+    final private TabelaPrecosService precoService = new TabelaPrecosService(new TabelaPrecos());
 
     @Autowired
     public ParquimetroController(BilheteRepository repo){
@@ -45,85 +72,38 @@ public class ParquimetroController {
     }
 
     @PostMapping()
-    @Operation(
-            summary = "Cadastrar um Bilhete",
-            description = "Gera um Bilhete de acordo com a placa e tempo passado")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            required = true,
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = Bilhete.class),
-                    examples = {
-                            @ExampleObject(
-                                    name = "Exemplo de cadastro de um bilhete",
-                                    value = CADASTRO_EXEMPLO)}))
+    @Operation(summary = "Cadastrar um Bilhete", description = "Gera um Bilhete de acordo com a placa e tempo passado")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content =
+        @Content(mediaType = "application/json", schema =
+            @Schema(implementation = Bilhete.class), examples = {
+                @ExampleObject(name = "Exemplo de cadastro de um bilhete", value = CADASTRO_REQUEST)}))
     public ResponseEntity<InfoPagamento> cadastraVeiculo(@RequestBody Bilhete req){
 
         //service.validar
 
         repo.save(req);
         var valor = precoService.pegarValor(req.getTempo());
-        InfoPagamento res = new InfoPagamento(valor, pagamentos);
+        InfoPagamento res = new InfoPagamento(valor, PAGAMENTOS);
         return ResponseEntity.ok(res);
     }
 
     @GetMapping
-    @Operation(
-            summary = "Todos os bilhetes",
-            description = "Retorna uma lista com todos os bilhetes disponíveis no sistema.",
-        responses = {
-        @ApiResponse(
-                responseCode = "200",
-                content = @Content(
-                        mediaType = "application/json",
-                        examples = @ExampleObject(
-                                name = "Exemplo de resposta",
-                                value = """
-                                        [
-                                                              {
-                                                                "id": "x",
-                                                                "placa": "z",
-                                                                "tempo": "PT00H",
-                                                                "momentoDaSolicitacao": "yyyy-MM-dd",
-                                                                "pago": false
-                                                              },
-                                                              {
-                                                                "id": "x",
-                                                                "placa": "z",
-                                                                "tempo": "PT00H",
-                                                                "momentoDaSolicitacao": "yyyy-MM-dd",
-                                                                "pago": true
-                                                              }
-                                                            ]
-                    """
-                        )
-                )
-        )})
+    @Operation(summary = "Todos os bilhetes", description = "Retorna uma lista com todos os bilhetes disponíveis no sistema.",
+            responses = {
+        @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = "application/json", examples =
+                @ExampleObject(name = "Exemplo de resposta",value = LISTA_DE_BILHETES_RESPONSE)))})
     public ResponseEntity<List<Bilhete>> listarBilhetes(){
 
         return ResponseEntity.ok(repo.findAll());
     }
 
     @GetMapping("/{placa}")
-    @Operation(
-            summary = "Buscar bilhete",
-            description = "Retorna o Bilhete do carro referente a palca informada",
+    @Operation(summary = "Buscar bilhete", description = "Retorna o Bilhete do carro referente a palca informada",
             responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    examples = @ExampleObject(
-                                            name = "Exemplo de resposta",
-                                            value = """
-                                            {
-                                              "id": "123",
-                                              "placa": "x",
-                                              "tempo": "PT0H",
-                                              "momentoDaSolicitacao": "yyyy-MM-dd",
-                                              "pago": false
-                                            }
-                                            """)))})
+        @ApiResponse(responseCode = "200", content =
+            @Content(mediaType = "application/json", examples =
+                @ExampleObject(name = "Exemplo de resposta", value = BILHETE_RESPONSE)))})
     public ResponseEntity<Bilhete> acharBilhete(@PathVariable String placa){
 
         try{
@@ -137,10 +117,8 @@ public class ParquimetroController {
 
     }
 
-    @Operation(
-            summary = "Pagar bilhete",
-            description = "Recebe o id do bilhete que deseja pagar e o recibo do pagamento")
     @PutMapping
+    @Operation(summary = "Pagar bilhete", description = "Recebe o id do bilhete que deseja pagar e o recibo do pagamento")
     public ResponseEntity pagarBilhete(@RequestBody ReciboPagamento req){
 
         var bilhete = repo.findById(req.bilhete).orElseGet(null);
