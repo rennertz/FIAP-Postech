@@ -12,6 +12,7 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -29,13 +30,14 @@ public class ParquimetroController {
 
     private static final Set<String> pagamentos =  Set.of("pix", "credito", "debito");
 
-    private record InfoPagamento(Double valor, Set<String> meioDePagamento) {};
+    private record InfoPagamento(BigDecimal valor, Set<String> meioDePagamento) {};
 
     private record ReciboPagamento(String bilhete, Boolean recibo) {public ReciboPagamento {
             recibo = true;
     }};
 
     private BilheteRepository repo;
+    private TabelaPrecosService precoService = new TabelaPrecosService(new TabelaPrecos());
 
     @Autowired
     public ParquimetroController(BilheteRepository repo){
@@ -60,8 +62,8 @@ public class ParquimetroController {
         //service.validar
 
         repo.save(req);
-        var valor = req.pegarValor();
-        InfoPagamento res = new InfoPagamento(valor,pagamentos );
+        var valor = precoService.pegarValor(req.getTempo());
+        InfoPagamento res = new InfoPagamento(valor, pagamentos);
         return ResponseEntity.ok(res);
     }
 

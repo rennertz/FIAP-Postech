@@ -1,27 +1,57 @@
 package br.com.pixpark.parquimetro;
 
-import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+//@Document(collection = "Precos")
 public class TabelaPrecos {
 
-    private static final Map<Integer, Double> PRECOS = Map.of(
-            1, 33.00,
-            2, 41.00,
-            3, 48.00,
-            4, 53.00,
-            5, 58.00,
-            6, 62.00,
-            7, 66.00
-    );
+    public static final IllegalArgumentException TEMPO_DE_PERMANENCIA_INVALIDO = new IllegalArgumentException("Tempo de permanência inválido");
+    public static final IllegalArgumentException TEMPO_DE_PERMANENCIA_EXCESSIVO = new IllegalArgumentException("Tempo de permanência excede máximo permitido");
+    //    @Id
+    public String id;
+    SortedMap<Integer, BigDecimal> precos =  new TreeMap<>(Map.of(
+            1, new BigDecimal("1.50"),
+            2, new BigDecimal("2.25"),
+            3, new BigDecimal("3.00"),
+            4, new BigDecimal("4.50")
+    ));
+    LocalDateTime inicioVigencia = LocalDateTime.now();
 
-    public static Double getPreco(long h){
-        int horas = (int) h;
-        if (horas <= 7) {
-            return PRECOS.getOrDefault(horas, 0.0);
-        } else if (horas > 7 && horas <= 23) {
-            return PRECOS.get(7) + (horas - 7) * 2.00;
-        } else {
-            return 100.00; // Valor diário
+    public BigDecimal getPreco(int horas){
+        Integer permanenciaMinima = precos.firstKey();
+        Integer permanenciaMaxima = precos.lastKey();
+
+        if (horas < 0) {
+            throw TEMPO_DE_PERMANENCIA_INVALIDO;
         }
+        if (horas > permanenciaMaxima) {
+            throw TEMPO_DE_PERMANENCIA_EXCESSIVO;
+        }
+
+        if (horas <= permanenciaMinima) {
+            return precos.get(permanenciaMinima);
+        } else {
+            return tentaObterValor(horas);}
+
+    }
+
+    private BigDecimal tentaObterValor(Integer horas) {
+        return Optional.ofNullable(precos.get(horas))
+                .orElseThrow(() -> TEMPO_DE_PERMANENCIA_INVALIDO);
+
     }
 }

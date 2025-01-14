@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,9 +25,5 @@ public class Bilhete{
     Duration tempo;
     LocalDateTime momentoDaSolicitacao = LocalDateTime.now();
     Boolean pago = false;
-
-    public Double pegarValor(){
-       return TabelaPrecos.getPreco(tempo.toHours());
-    }
 
 }
