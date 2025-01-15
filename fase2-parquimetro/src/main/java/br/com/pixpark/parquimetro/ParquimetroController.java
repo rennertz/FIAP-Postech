@@ -17,7 +17,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/bilhete")
-@Tag(name="0. Compra de Bilhete")
+@Tag(name="1. Compra de Bilhete")
 public class ParquimetroController {
 
     private static final Set<String> PAGAMENTOS =  Set.of("pix", "credito", "debito");
@@ -64,11 +64,12 @@ public class ParquimetroController {
     }
 
     final private BilheteRepository repo;
-    final private TabelaPrecosService precoService = new TabelaPrecosService(new TabelaPrecos());
+    final private TabelaPrecosService precoService;
 
     @Autowired
-    public ParquimetroController(BilheteRepository repo){
+    public ParquimetroController(BilheteRepository repo, TabelaPrecosService precoService){
         this.repo = repo;
+        this.precoService = precoService;
     }
 
     @PostMapping()

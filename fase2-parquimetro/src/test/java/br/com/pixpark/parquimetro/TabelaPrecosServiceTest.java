@@ -1,15 +1,41 @@
 package br.com.pixpark.parquimetro;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class TabelaPrecosServiceTest {
 
-    TabelaPrecosService service = new TabelaPrecosService(new TabelaPrecos());
+    @Mock
+    TabelaPrecosRepository precosRepo;
+
+    @InjectMocks
+    TabelaPrecosService service;
+
+    @BeforeEach
+    void setUp() {
+
+        Map<Integer, BigDecimal> precos = Map.of(
+                1, new BigDecimal("1.50"),
+                2, new BigDecimal("2.25"),
+                3, new BigDecimal("3.00"),
+                4, new BigDecimal("4.50")
+        );
+        TabelaPrecos tabelaPrecos = new TabelaPrecos(precos);
+        when(precosRepo.findFirstByOrderByInicioVigenciaDesc()).thenReturn(Optional.of(tabelaPrecos));
+    }
 
     @Test
     void pegarValor() {

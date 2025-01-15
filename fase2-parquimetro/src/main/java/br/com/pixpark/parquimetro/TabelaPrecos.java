@@ -1,35 +1,35 @@
 package br.com.pixpark.parquimetro;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-//@Document(collection = "Precos")
+@Document(collection = "tabela_precos")
 public class TabelaPrecos {
 
     public static final IllegalArgumentException TEMPO_DE_PERMANENCIA_INVALIDO = new IllegalArgumentException("Tempo de permanência inválido");
     public static final IllegalArgumentException TEMPO_DE_PERMANENCIA_EXCESSIVO = new IllegalArgumentException("Tempo de permanência excede máximo permitido");
-    //    @Id
+
+    @Id
     public String id;
-    SortedMap<Integer, BigDecimal> precos =  new TreeMap<>(Map.of(
-            1, new BigDecimal("1.50"),
-            2, new BigDecimal("2.25"),
-            3, new BigDecimal("3.00"),
-            4, new BigDecimal("4.50")
-    ));
-    LocalDateTime inicioVigencia = LocalDateTime.now();
+    Instant inicioVigencia = Instant.now();
+    SortedMap<Integer, BigDecimal> precos;
+
+    public TabelaPrecos(Map<Integer, BigDecimal> precos) {
+        this.precos = new TreeMap<>(precos);
+    }
 
     public BigDecimal getPreco(int horas){
         Integer permanenciaMinima = precos.firstKey();
