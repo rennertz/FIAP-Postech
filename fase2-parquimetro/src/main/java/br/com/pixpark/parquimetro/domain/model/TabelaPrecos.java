@@ -1,4 +1,4 @@
-package br.com.pixpark.parquimetro;
+package br.com.pixpark.parquimetro.domain.model;
 
 import java.util.Map;
 

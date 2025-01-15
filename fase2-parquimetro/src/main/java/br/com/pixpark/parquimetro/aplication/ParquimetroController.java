@@ -1,14 +1,14 @@
-package br.com.pixpark.parquimetro;
+package br.com.pixpark.parquimetro.aplication;
 
+import br.com.pixpark.parquimetro.domain.model.Bilhete;
+import br.com.pixpark.parquimetro.infrastructure.BilheteRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -102,7 +102,7 @@ public class ParquimetroController {
         return ResponseEntity.ok(repo.findAll());
     }
 
-    @GetMapping("/{placa}")
+    @GetMapping("/busca")
     @Operation(
             summary = "Buscar bilhete",
             description = "Retorna o Bilhete do carro referente a palca informada",
@@ -122,16 +122,27 @@ public class ParquimetroController {
                                               "pago": false
                                             }
                                             """)))})
-    public ResponseEntity<Bilhete> acharBilhete(@PathVariable String placa){
+    public ResponseEntity acharBilhete( @RequestParam(required = false) String id,
+                                                 @RequestParam(required = false) String placa){
 
-        try{
-            Bilhete res = repo.findByPlaca(placa);
-            return ResponseEntity.ok(res);
-        }catch (IncorrectResultSizeDataAccessException e){
-            var todos = repo.findAllByPlaca(placa);
-            Bilhete res = todos.getFirst();
-            return ResponseEntity.ok(res);
+        if(id != null && placa != null){
+            var bilhete = repo.findById(id);
+            if(bilhete.isPresent() && bilhete.get().getPlaca().equals(placa))
+                return ResponseEntity.ok(bilhete.get());
+
+        } else if (placa != null) {
+            var bilhete = repo.findAllByPlaca(placa);
+            if(bilhete.size() > 0 )
+                return ResponseEntity.ok(bilhete.getLast());
+
+        } else if (id != null) {
+            var bilhete = repo.findById(id);
+            if(bilhete.isPresent())
+                return ResponseEntity.ok(bilhete.get());
+
         }
+
+        return ResponseEntity.badRequest().body("Parametros placa ou id não validos!");
 
     }
 
