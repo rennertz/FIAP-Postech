@@ -1,5 +1,7 @@
-package br.com.pixpark.parquimetro;
+package br.com.pixpark.parquimetro.domain.service;
 
+import br.com.pixpark.parquimetro.infrastructure.TabelaPrecosRepository;
+import br.com.pixpark.parquimetro.domain.model.TabelaPrecos;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

@@ -1,5 +1,6 @@
-package br.com.pixpark.parquimetro;
+package br.com.pixpark.parquimetro.infrastructure;
 
+import br.com.pixpark.parquimetro.domain.model.TabelaPrecos;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

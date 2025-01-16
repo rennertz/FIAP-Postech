@@ -1,5 +1,8 @@
 package br.com.pixpark.parquimetro;
 
+import br.com.pixpark.parquimetro.domain.model.TabelaPrecos;
+import br.com.pixpark.parquimetro.domain.service.TabelaPrecosService;
+import br.com.pixpark.parquimetro.infrastructure.TabelaPrecosRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

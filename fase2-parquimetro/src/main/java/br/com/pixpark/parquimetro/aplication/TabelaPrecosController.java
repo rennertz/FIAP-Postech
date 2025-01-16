@@ -1,5 +1,7 @@
-package br.com.pixpark.parquimetro;
+package br.com.pixpark.parquimetro.aplication;
 
+import br.com.pixpark.parquimetro.domain.model.TabelaPrecos;
+import br.com.pixpark.parquimetro.domain.service.TabelaPrecosService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
