@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -24,6 +25,6 @@ public class Bilhete{
     String placa;
     Duration tempo;
     LocalDateTime momentoDaSolicitacao = LocalDateTime.now();
-    Boolean pago = false;
-
+    BigDecimal valorPago;
+    String meioDePagamento;
 }

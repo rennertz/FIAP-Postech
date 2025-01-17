@@ -27,7 +27,9 @@ public class ParquimetroController {
     private static final String CADASTRO_REQUEST = """
             {
               "placa": "ABC-4321",
-              "tempo": "PT2H"
+              "tempo": "PT2H",
+              "valorPago": "2.5",
+              "meioDePagamento": "dinheiro"
             }
         """;
     public static final String LISTA_DE_BILHETES_RESPONSE = """
@@ -119,20 +121,6 @@ public class ParquimetroController {
             return ResponseEntity.ok(res);
         }
 
-    }
-
-    @PutMapping
-    @Operation(summary = "Pagar bilhete", description = "Recebe o id do bilhete que deseja pagar e o recibo do pagamento")
-    public ResponseEntity pagarBilhete(@RequestBody ReciboPagamento req){
-
-        var bilhete = repo.findById(req.bilhete).orElseGet(null);
-
-        if(req.recibo()){
-            bilhete.setPago(true);
-            repo.save(bilhete);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.badRequest().build();
     }
 
 }
