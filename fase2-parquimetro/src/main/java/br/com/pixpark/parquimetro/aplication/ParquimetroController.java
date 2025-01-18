@@ -1,126 +1,84 @@
 package br.com.pixpark.parquimetro.aplication;
 
 import br.com.pixpark.parquimetro.domain.model.Bilhete;
+import br.com.pixpark.parquimetro.domain.model.TabelaPrecos;
+import br.com.pixpark.parquimetro.domain.service.BilheteService;
 import br.com.pixpark.parquimetro.infrastructure.BilheteRepository;
-import br.com.pixpark.parquimetro.domain.service.TabelaPrecosService;
+import br.com.pixpark.parquimetro.infrastructure.TabelaPrecoRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Set;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/bilhete")
-@Tag(name="1. Compra de Bilhete")
+@RequestMapping("/estacionamento")
+@Tag(name="Estacionamento pago")
 public class ParquimetroController {
 
-    private static final Set<String> PAGAMENTOS =  Set.of("pix", "credito", "debito");
-    private static final String CADASTRO_REQUEST = """
-            {
-              "placa": "ABC-4321",
-              "tempo": "PT2H",
-              "valorPago": "2.5",
-              "meioDePagamento": "dinheiro"
-            }
-        """;
-    public static final String LISTA_DE_BILHETES_RESPONSE = """
-            [
-              {
-                "id": "x",
-                "placa": "z",
-                "tempo": "PT00H",
-                "momentoDaSolicitacao": "yyyy-MM-dd",
-                "pago": false
-              },
-              {
-                "id": "x",
-                "placa": "z",
-                "tempo": "PT00H",
-                "momentoDaSolicitacao": "yyyy-MM-dd",
-                "pago": true
-              }
-            ]
-        """;
-    public static final String BILHETE_RESPONSE = """
-            {
-              "id": "123",
-              "placa": "x",
-              "tempo": "PT0H",
-              "momentoDaSolicitacao": "yyyy-MM-dd",
-              "pago": false
-            }
-        """;
+    private BilheteRepository repo;
+    private TabelaPrecoRepository tabelaPrecoRepository;
 
-    public record InfoPagamento(BigDecimal valor, Set<String> meioDePagamento) {}
 
-    public record ReciboPagamento(String bilhete, Boolean recibo) {
-        public ReciboPagamento {
-            recibo = true;
-        }
-    }
-
-    final private BilheteRepository repo;
-    final private TabelaPrecosService precoService;
 
     @Autowired
-    public ParquimetroController(BilheteRepository repo, TabelaPrecosService precoService){
+    public ParquimetroController(BilheteRepository repo, TabelaPrecoRepository tabelaPrecoRepository){
         this.repo = repo;
-        this.precoService = precoService;
+        this.tabelaPrecoRepository = tabelaPrecoRepository;
     }
 
-    @PostMapping()
-    @Operation(summary = "Cadastrar um Bilhete", description = "Gera um Bilhete de acordo com a placa e tempo passado")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content =
-        @Content(mediaType = "application/json", schema =
-            @Schema(implementation = Bilhete.class), examples = {
-                @ExampleObject(name = "Exemplo de cadastro de um bilhete", value = CADASTRO_REQUEST)}))
-    public ResponseEntity<InfoPagamento> cadastraVeiculo(@RequestBody Bilhete req){
-
-        //service.validar
-
-        repo.save(req);
-        var valor = precoService.pegarValor(req.getTempo());
-        InfoPagamento res = new InfoPagamento(valor, PAGAMENTOS);
-        return ResponseEntity.ok(res);
-    }
 
     @GetMapping
-    @Operation(summary = "Todos os bilhetes", description = "Retorna uma lista com todos os bilhetes disponíveis no sistema.",
-            responses = {
-        @ApiResponse(responseCode = "200", content =
-            @Content(mediaType = "application/json", examples =
-                @ExampleObject(name = "Exemplo de resposta",value = LISTA_DE_BILHETES_RESPONSE)))})
-    public ResponseEntity<List<Bilhete>> listarBilhetes(){
+    @Operation(
+            summary = "Tabela de precos",
+            description = "Retorna a tabela de precos usado no parquimetro"
+    )
+    public ResponseEntity<TabelaPrecos> mostraTabelaPrecos(){
 
-        return ResponseEntity.ok(repo.findAll());
+        TabelaPrecos tabela = tabelaPrecoRepository.findAll().getLast();
+
+        return ResponseEntity.ok(tabela);
+
     }
 
-    @GetMapping("/{placa}")
-    @Operation(summary = "Buscar bilhete", description = "Retorna o Bilhete do carro referente a palca informada",
-            responses = {
-        @ApiResponse(responseCode = "200", content =
-            @Content(mediaType = "application/json", examples =
-                @ExampleObject(name = "Exemplo de resposta", value = BILHETE_RESPONSE)))})
-    public ResponseEntity<Bilhete> acharBilhete(@PathVariable String placa){
 
-        try{
-            Bilhete res = repo.findByPlaca(placa);
-            return ResponseEntity.ok(res);
-        }catch (IncorrectResultSizeDataAccessException e){
-            var todos = repo.findAllByPlaca(placa);
-            Bilhete res = todos.getFirst();
-            return ResponseEntity.ok(res);
+    @PostMapping
+    @Operation(
+            summary = "Gerar Bilhete",
+            description = "Cadastra uma placa e gera um bilhete do parquimetro"
+    )
+    public ResponseEntity gerarBilhete(@RequestBody DTOgerarBilheteRequest req){
+        Bilhete bilhete = new Bilhete();
+        bilhete.setPlaca(req.placa());
+        bilhete.setTempo(req.tempo());
+        bilhete = repo.save(bilhete);
+        return ResponseEntity.ok(bilhete);
+    }
+
+
+
+    @GetMapping
+    @Operation(
+            summary = "Verificar Carro",
+            description = "Verifica o carro, e mostra seu bilhete"
+    )
+    public ResponseEntity verificarCarro(@PathVariable String placa){
+        var lista = repo.findAllByPlaca(placa);
+        if(lista.isEmpty()){
+           return ResponseEntity.ok("Placa não cadastrada!");
         }
-
+        var bilhete = lista.getLast();
+        return ResponseEntity.ok(bilhete);
     }
 
+
+
+    //dtos usado no controller
+    private record DTOgerarBilheteRequest(@NotBlank String placa,@NotBlank Duration tempo) {};
 }
+
+
