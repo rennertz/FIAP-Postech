@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/precos")
+@RequestMapping("/v1/precos")
 @Tag(name="0. Consulta e alteração de valores")
 public class TabelaPrecosController {
 
@@ -43,7 +43,7 @@ public class TabelaPrecosController {
     }
 
     @PostMapping()
-    @Operation(summary = "Alterar preços", description = "Informe preços por horário para a nova vigência")
+    @Operation(summary = "Nova política de preços", description = "Informe preços por período (horas) para a nova vigência")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content =
         @Content(mediaType = "application/json", schema =
             @Schema(implementation = Preco.class), examples = {

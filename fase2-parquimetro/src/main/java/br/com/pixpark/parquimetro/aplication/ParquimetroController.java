@@ -3,34 +3,31 @@ package br.com.pixpark.parquimetro.aplication;
 import br.com.pixpark.parquimetro.domain.model.Bilhete;
 import br.com.pixpark.parquimetro.domain.model.TabelaPrecos;
 import br.com.pixpark.parquimetro.domain.service.BilheteService;
-import br.com.pixpark.parquimetro.infrastructure.BilheteRepository;
-import br.com.pixpark.parquimetro.infrastructure.TabelaPrecoRepository;
+import br.com.pixpark.parquimetro.domain.service.TabelaPrecosService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/estacionamento")
-@Tag(name="Estacionamento pago")
+@RequestMapping("/v1/bilhete")
+@Tag(name="Parquimetro urbano")
 public class ParquimetroController {
 
-    private BilheteRepository repo;
-    private TabelaPrecoRepository tabelaPrecoRepository;
-
-
+    private final BilheteService bilheteService;
+    private final TabelaPrecosService precosService;
 
     @Autowired
-    public ParquimetroController(BilheteRepository repo, TabelaPrecoRepository tabelaPrecoRepository){
-        this.repo = repo;
-        this.tabelaPrecoRepository = tabelaPrecoRepository;
+    public ParquimetroController(BilheteService bilheteService, TabelaPrecosService precoService){
+        this.bilheteService = bilheteService;
+        this.precosService = precoService;
     }
-
 
     @GetMapping
     @Operation(
@@ -38,47 +35,31 @@ public class ParquimetroController {
             description = "Retorna a tabela de precos usado no parquimetro"
     )
     public ResponseEntity<TabelaPrecos> mostraTabelaPrecos(){
-
-        TabelaPrecos tabela = tabelaPrecoRepository.findAll().getLast();
-
-        return ResponseEntity.ok(tabela);
-
+        return ResponseEntity.ok(precosService.getValoresVigentes());
     }
-
 
     @PostMapping
     @Operation(
             summary = "Gerar Bilhete",
             description = "Cadastra uma placa e gera um bilhete do parquimetro"
     )
-    public ResponseEntity gerarBilhete(@RequestBody DTOgerarBilheteRequest req){
-        Bilhete bilhete = new Bilhete();
-        bilhete.setPlaca(req.placa());
-        bilhete.setTempo(req.tempo());
-        bilhete = repo.save(bilhete);
-        return ResponseEntity.ok(bilhete);
+    public ResponseEntity<Bilhete> gerarBilhete(@RequestBody DTOGerarBilheteRequest req){
+        return ResponseEntity.ok(bilheteService.getNovoBilhete(req));
     }
 
-
-
-    @GetMapping
+    @GetMapping("/{placa}")
     @Operation(
             summary = "Verificar Carro",
             description = "Verifica o carro, e mostra seu bilhete"
     )
-    public ResponseEntity verificarCarro(@PathVariable String placa){
-        var lista = repo.findAllByPlaca(placa);
-        if(lista.isEmpty()){
-           return ResponseEntity.ok("Placa não cadastrada!");
-        }
-        var bilhete = lista.getLast();
+    public ResponseEntity<Bilhete> verificarCarro(@PathVariable String placa){
+        var bilhete = bilheteService.getBilheteBy(placa)
+            .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND ,"Placa não cadastrada!"));
+
         return ResponseEntity.ok(bilhete);
     }
 
 
-
-    //dtos usado no controller
-    private record DTOgerarBilheteRequest(@NotBlank String placa,@NotBlank Duration tempo) {};
+    // dtos usado no controller
+    public record DTOGerarBilheteRequest(@NotBlank String placa, @NotBlank Duration tempo) {}
 }
-
-
