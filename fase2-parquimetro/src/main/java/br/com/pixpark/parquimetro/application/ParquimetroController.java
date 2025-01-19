@@ -1,19 +1,17 @@
-package br.com.pixpark.parquimetro.aplication;
+package br.com.pixpark.parquimetro.application;
 
+import br.com.pixpark.parquimetro.application.dtos.DTOGerarBilheteRequest;
 import br.com.pixpark.parquimetro.domain.model.Bilhete;
 import br.com.pixpark.parquimetro.domain.model.TabelaPrecos;
 import br.com.pixpark.parquimetro.domain.service.BilheteService;
 import br.com.pixpark.parquimetro.domain.service.TabelaPrecosService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.time.Duration;
 
 @RestController
 @RequestMapping("/v1/bilhete")
@@ -44,7 +42,7 @@ public class ParquimetroController {
             description = "Cadastra uma placa e gera um bilhete do parquimetro"
     )
     public ResponseEntity<Bilhete> gerarBilhete(@RequestBody DTOGerarBilheteRequest req){
-        return ResponseEntity.ok(bilheteService.getNovoBilhete(req));
+        return ResponseEntity.ok(bilheteService.getNovoBilhete(req.placa(), req.tempo()));
     }
 
     @GetMapping("/{placa}")
@@ -58,8 +56,4 @@ public class ParquimetroController {
 
         return ResponseEntity.ok(bilhete);
     }
-
-
-    // dtos usado no controller
-    public record DTOGerarBilheteRequest(@NotBlank String placa, @NotBlank Duration tempo) {}
 }

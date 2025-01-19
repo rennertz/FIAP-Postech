@@ -1,10 +1,11 @@
 package br.com.pixpark.parquimetro.domain.service;
 
-import br.com.pixpark.parquimetro.aplication.ParquimetroController;
 import br.com.pixpark.parquimetro.domain.model.Bilhete;
 import br.com.pixpark.parquimetro.infrastructure.BilheteRepository;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Optional;
 
 @Service
@@ -16,10 +17,10 @@ public class BilheteService {
         this.repo = repo;
     }
 
-    public Bilhete getNovoBilhete(ParquimetroController.DTOGerarBilheteRequest req) {
+    public Bilhete getNovoBilhete(@NotBlank String placa, @NotBlank Duration tempo) {
         Bilhete bilhete = new Bilhete();
-        bilhete.setPlaca(req.placa());
-        bilhete.setTempo(req.tempo());
+        bilhete.setPlaca(placa);
+        bilhete.setTempo(tempo);
         return repo.save(bilhete);
     }
 

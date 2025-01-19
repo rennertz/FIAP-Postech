@@ -1,4 +1,4 @@
-package br.com.pixpark.parquimetro.aplication;
+package br.com.pixpark.parquimetro.application;
 
 import br.com.pixpark.parquimetro.domain.model.TabelaPrecos;
 import br.com.pixpark.parquimetro.domain.service.TabelaPrecosService;
@@ -21,7 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v1/precos")
 @Tag(name="0. Consulta e alteração de valores")
-public class TabelaPrecosController {
+public class AdminPrecosController {
 
     private static final String VALORES = """
             {
@@ -38,7 +38,7 @@ public class TabelaPrecosController {
     final private TabelaPrecosService precoService;
 
     @Autowired
-    public TabelaPrecosController(TabelaPrecosService precoService){
+    public AdminPrecosController(TabelaPrecosService precoService){
         this.precoService = precoService;
     }
 
