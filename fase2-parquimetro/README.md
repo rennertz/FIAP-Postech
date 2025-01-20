@@ -15,6 +15,6 @@ docker compose -f run/compose.yaml up
 ## Use
 
 
-http://localhost:8080/api-docs-ui.html
+http://localhost:8080/parquimetro/api-docs-ui.html
 
-http://localhost:8080/api-docs
+http://localhost:8080/parquimetro/api-docs

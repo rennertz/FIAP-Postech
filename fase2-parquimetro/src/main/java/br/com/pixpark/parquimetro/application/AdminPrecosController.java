@@ -1,4 +1,4 @@
-package br.com.pixpark.parquimetro.aplication;
+package br.com.pixpark.parquimetro.application;
 
 import br.com.pixpark.parquimetro.domain.model.TabelaPrecos;
 import br.com.pixpark.parquimetro.domain.service.TabelaPrecosService;
@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/precos")
+@RequestMapping("/v1/precos")
 @Tag(name="0. Consulta e alteração de valores")
-public class TabelaPrecosController {
+public class AdminPrecosController {
 
     private static final String VALORES = """
             {
@@ -38,12 +38,12 @@ public class TabelaPrecosController {
     final private TabelaPrecosService precoService;
 
     @Autowired
-    public TabelaPrecosController(TabelaPrecosService precoService){
+    public AdminPrecosController(TabelaPrecosService precoService){
         this.precoService = precoService;
     }
 
     @PostMapping()
-    @Operation(summary = "Alterar preços", description = "Informe preços por horário para a nova vigência")
+    @Operation(summary = "Nova política de preços", description = "Informe preços por período (horas) para a nova vigência")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content =
         @Content(mediaType = "application/json", schema =
             @Schema(implementation = Preco.class), examples = {
