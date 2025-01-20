@@ -55,7 +55,7 @@ public class TabelaPrecosService {
         }
     }
 
-    public BigDecimal pegarValor(Duration tempo){
+    public BigDecimal getValorBy(Duration tempo){
         long hours = tempo.toHours();
         return repo.findFirstByOrderByInicioVigenciaDesc()
                 .map(precos -> precos.getPreco((int) hours))

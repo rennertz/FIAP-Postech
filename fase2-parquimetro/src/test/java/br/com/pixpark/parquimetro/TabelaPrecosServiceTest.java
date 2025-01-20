@@ -41,31 +41,31 @@ class TabelaPrecosServiceTest {
     }
 
     @Test
-    void pegarValor() {
+    void getValorBy() {
         assertEquals(
                 new BigDecimal("1.50"),
-                service.pegarValor(Duration.ofHours(1)));
+                service.getValorBy(Duration.ofHours(1)));
         assertEquals(
                 new BigDecimal("2.25"),
-                service.pegarValor(Duration.ofHours(2)));
+                service.getValorBy(Duration.ofHours(2)));
         assertEquals(
                 new BigDecimal("3.00"),
-                service.pegarValor(Duration.ofHours(3)));
+                service.getValorBy(Duration.ofHours(3)));
         assertEquals(
                 new BigDecimal("4.50"),
-                service.pegarValor(Duration.ofHours(4)));
+                service.getValorBy(Duration.ofHours(4)));
     }
 
     @Test
-    void pegarValorErrors() {
+    void getValorByErrors() {
         IllegalArgumentException negativeValueException = assertThrows(
                 IllegalArgumentException.class,
-                () -> service.pegarValor(Duration.ofHours(-1)));
+                () -> service.getValorBy(Duration.ofHours(-1)));
         assertEquals("Tempo de permanência inválido", negativeValueException.getMessage());
 
         IllegalArgumentException excessiveTimeException = assertThrows(
                 IllegalArgumentException.class,
-                () -> service.pegarValor(Duration.ofHours(5)));
+                () -> service.getValorBy(Duration.ofHours(5)));
         assertEquals("Tempo de permanência excede máximo permitido", excessiveTimeException.getMessage());
     }
 }

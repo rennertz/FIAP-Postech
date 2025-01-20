@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Optional;
 
@@ -14,20 +15,32 @@ import java.util.Optional;
 public class BilheteService {
 
     private final BilheteRepository repo;
+    private final TabelaPrecosService precos;
     private final ValueOperations<String, Bilhete> redisValueOps;
 
-    public BilheteService(BilheteRepository repo, RedisOperations<String, Bilhete> cacheOps) {
+    public BilheteService(BilheteRepository repo, TabelaPrecosService precos, RedisOperations<String, Bilhete> cacheOps) {
         this.repo = repo;
+        this.precos = precos;
         redisValueOps = cacheOps.opsForValue();
     }
 
     public Bilhete getNovoBilhete(@NotBlank String placa, @NotBlank Duration tempo) {
+        Bilhete novoBilhete = makeNovoBilhete(placa, tempo);
+
+        Bilhete savedBilhete = repo.save(novoBilhete);
+        redisValueOps.set(placa, savedBilhete, tempo);
+        return savedBilhete;
+    }
+
+    private Bilhete makeNovoBilhete(String placa, Duration tempo) {
         Bilhete bilhete = new Bilhete();
         bilhete.setPlaca(placa);
         bilhete.setTempo(tempo);
-        Bilhete savedBilhete = repo.save(bilhete);
-        redisValueOps.set(placa, savedBilhete, tempo);
-        return savedBilhete;
+
+        BigDecimal valor = precos.getValorBy(tempo);
+        bilhete.setValorPago(valor);
+        bilhete.setMeioDePagamento("pix");
+        return bilhete;
     }
 
     public Optional<Bilhete> getBilheteBy(String placa) {

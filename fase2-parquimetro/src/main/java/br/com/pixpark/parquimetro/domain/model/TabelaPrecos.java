@@ -37,7 +37,7 @@ public class TabelaPrecos {
         Integer permanenciaMinima = precos.firstKey();
         Integer permanenciaMaxima = precos.lastKey();
 
-        if (horas < 0) {
+        if (horas <= 0) {
             throw TEMPO_DE_PERMANENCIA_INVALIDO;
         }
         if (horas > permanenciaMaxima) {
