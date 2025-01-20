@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Duration;
+
 @RestController
 @RequestMapping("/v1/bilhete")
 @Tag(name="Parquimetro urbano")
@@ -42,7 +44,8 @@ public class ParquimetroController {
             description = "Cadastra uma placa e gera um bilhete do parquimetro"
     )
     public ResponseEntity<Bilhete> gerarBilhete(@RequestBody DTOGerarBilheteRequest req){
-        return ResponseEntity.ok(bilheteService.getNovoBilhete(req.placa(), req.tempo()));
+        Duration tempo = Duration.ofHours(req.tempoEmHoras());
+        return ResponseEntity.ok(bilheteService.getNovoBilhete(req.placa(), tempo));
     }
 
     @GetMapping("/{placa}")

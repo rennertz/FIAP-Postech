@@ -31,7 +31,7 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
-    command: ["redis-server", "--requirepass", "redispassword"]
+    command: ["redis-server"]
     environment:
       REDIS_PASSWORD: redispassword
 
