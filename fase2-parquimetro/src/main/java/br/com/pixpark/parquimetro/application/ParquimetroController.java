@@ -27,7 +27,7 @@ public class ParquimetroController {
         this.precosService = precoService;
     }
 
-    @GetMapping
+    @GetMapping("/precos")
     @Operation(
             summary = "Tabela de precos",
             description = "Retorna a tabela de precos usado no parquimetro"
