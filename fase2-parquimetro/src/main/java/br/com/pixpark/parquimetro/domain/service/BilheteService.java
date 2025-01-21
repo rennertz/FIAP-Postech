@@ -3,6 +3,7 @@ package br.com.pixpark.parquimetro.domain.service;
 import br.com.pixpark.parquimetro.domain.model.Bilhete;
 import br.com.pixpark.parquimetro.infrastructure.BilheteRepository;
 import jakarta.validation.constraints.NotBlank;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class BilheteService {
 
@@ -29,6 +31,7 @@ public class BilheteService {
 
         Bilhete savedBilhete = repo.save(novoBilhete);
         redisValueOps.set(placa, savedBilhete, tempo);
+        log.info("Novo bilhete: {}", savedBilhete);
         return savedBilhete;
     }
 
@@ -44,15 +47,12 @@ public class BilheteService {
     }
 
     public Optional<Bilhete> getBilheteBy(String placa) {
-        var lista = repo.findAllByPlaca(placa);
-        if(lista.isEmpty()){
-            return Optional.empty();
-        }
-        return Optional.of(lista.getLast());
+        return repo.getUltimoBilhete(placa);
     }
 
     public Optional<Bilhete> getBilheteCachedBy(String placa) {
-        redisValueOps.get(placa);
-        return getBilheteBy(placa);
+        return Optional
+                .ofNullable(redisValueOps.get(placa))
+                .or(() -> getBilheteBy(placa));
     }
 }
