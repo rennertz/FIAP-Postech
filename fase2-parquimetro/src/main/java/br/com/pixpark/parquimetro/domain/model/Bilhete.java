@@ -1,13 +1,12 @@
 package br.com.pixpark.parquimetro.domain.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -16,8 +15,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Document(collection = "veiculos")
-public class Bilhete{
+public class Bilhete implements Serializable {
 
     @Id
     public String id;
@@ -27,4 +27,17 @@ public class Bilhete{
     LocalDateTime momentoDaSolicitacao = LocalDateTime.now();
     BigDecimal valorPago;
     String meioDePagamento;
+
+    @Transient
+    long tempoRestanteMinutos;
+
+    public long getTempoRestanteMinutos() {
+        Duration sinceCreation = Duration
+                .between(momentoDaSolicitacao, LocalDateTime.now());
+        Duration timeLeft = tempo.minus(sinceCreation);
+
+        long minutesLeft = timeLeft.toMinutes() + 1; // corrige truncamento (floor)
+
+        return minutesLeft < 0 ? 0 : minutesLeft;
+    }
 }

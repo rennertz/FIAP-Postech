@@ -3,6 +3,7 @@ package br.com.pixpark.parquimetro.domain.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,6 +17,7 @@ import java.util.TreeMap;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Document(collection = "tabela_precos")
 public class TabelaPrecos {
 
@@ -35,7 +37,7 @@ public class TabelaPrecos {
         Integer permanenciaMinima = precos.firstKey();
         Integer permanenciaMaxima = precos.lastKey();
 
-        if (horas < 0) {
+        if (horas <= 0) {
             throw TEMPO_DE_PERMANENCIA_INVALIDO;
         }
         if (horas > permanenciaMaxima) {
