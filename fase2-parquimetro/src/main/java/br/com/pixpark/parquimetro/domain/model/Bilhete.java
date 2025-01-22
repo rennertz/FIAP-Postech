@@ -3,6 +3,7 @@ package br.com.pixpark.parquimetro.domain.model;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -26,6 +27,9 @@ public class Bilhete implements Serializable {
     LocalDateTime momentoDaSolicitacao = LocalDateTime.now();
     BigDecimal valorPago;
     String meioDePagamento;
+
+    @Transient
+    long tempoRestanteMinutos;
 
     public long getTempoRestanteMinutos() {
         Duration sinceCreation = Duration

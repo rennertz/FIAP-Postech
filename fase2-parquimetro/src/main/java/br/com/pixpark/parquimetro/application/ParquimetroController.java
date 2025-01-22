@@ -45,7 +45,7 @@ public class ParquimetroController {
     )
     public ResponseEntity<Bilhete> gerarBilhete(@RequestBody DTOGerarBilheteRequest req){
         Duration tempo = Duration.ofHours(req.tempoEmHoras());
-        return ResponseEntity.ok(bilheteService.getNovoBilhete(req.placa(), tempo));
+        return ResponseEntity.ok(bilheteService.postNovoBilhete(req.placa(), tempo));
     }
 
     @GetMapping("/{placa}")

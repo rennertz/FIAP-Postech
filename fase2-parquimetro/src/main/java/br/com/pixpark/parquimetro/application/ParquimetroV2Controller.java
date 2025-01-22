@@ -1,5 +1,6 @@
 package br.com.pixpark.parquimetro.application;
 
+import br.com.pixpark.parquimetro.application.dtos.DTOGerarBilheteRequest;
 import br.com.pixpark.parquimetro.domain.model.Bilhete;
 import br.com.pixpark.parquimetro.domain.model.TabelaPrecos;
 import br.com.pixpark.parquimetro.domain.service.BilheteService;
@@ -9,11 +10,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.Duration;
 
 @RestController
 @RequestMapping("/v2/bilhete")
@@ -48,5 +48,15 @@ public class ParquimetroV2Controller {
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND ,"Placa não cadastrada!"));
 
         return ResponseEntity.ok(bilhete);
+    }
+
+    @PostMapping
+    @Operation(
+            summary = "Gerar Bilhete",
+            description = "Cadastra uma placa e gera um bilhete do parquimetro"
+    )
+    public ResponseEntity<Bilhete> gerarBilhete(@RequestBody DTOGerarBilheteRequest req){
+        Duration tempo = Duration.ofHours(req.tempoEmHoras());
+        return ResponseEntity.ok(bilheteService.postNovoBilheteAsync(req.placa(), tempo));
     }
 }

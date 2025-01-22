@@ -61,4 +61,12 @@ public class TabelaPrecosService {
                 .map(precos -> precos.getPreco((int) hours))
                 .orElseThrow(() -> new RuntimeException("Erro ao encontrar valores do rotativo"));
     }
+
+    public BigDecimal getValorByCached(Duration tempo){
+        long hours = tempo.toHours();
+        return Optional
+                .ofNullable(getValoresVigentesCached())
+                .map(precos -> precos.getPreco((int) hours))
+                .orElseThrow(() -> new RuntimeException("Erro ao encontrar valores do rotativo"));
+    }
 }
