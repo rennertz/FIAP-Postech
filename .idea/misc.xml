@@ -9,10 +9,11 @@
       <list>
         <option value="$PROJECT_DIR$/supervisor/pom.xml" />
         <option value="$PROJECT_DIR$/Fase 1 Tech Challenge/pom.xml" />
+        <option value="$PROJECT_DIR$/fase3-booknrest/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="corretto-21 (WSL)" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" default="true" project-jdk-name="openjdk-23" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
