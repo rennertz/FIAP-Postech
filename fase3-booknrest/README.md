@@ -12,11 +12,8 @@ alternativamente, execute
 docker compose -f run/compose.yaml up
 ```
 
-[//]: # (## Use)
+## Use
 
-[//]: # ()
-[//]: # ()
-[//]: # (http://localhost:8080/parquimetro/api-docs-ui.html)
+http://localhost:8080/booknrest/swagger-ui/index.html
 
-[//]: # ()
-[//]: # (http://localhost:8080/parquimetro/api-docs)
+http://localhost:8080/booknrest/api-docs
