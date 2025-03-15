@@ -38,7 +38,7 @@ public class RestauranteEntity {
     }
 
     public void adicionaHorarioDeFuncionamento(HorarioDeFuncionamentoEntity horario) {
-        horario.setRestaurante(this); // Ensure the bidirectional link is set
+        horario.setRestaurante(this); // garante que o link bidirecional está configurado
         this.horarioDeFuncionamento.add(horario);
     }
 

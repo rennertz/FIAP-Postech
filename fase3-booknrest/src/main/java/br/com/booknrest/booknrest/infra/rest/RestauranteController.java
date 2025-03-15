@@ -1,4 +1,4 @@
-package br.com.booknrest.booknrest.controllers;
+package br.com.booknrest.booknrest.infra.rest;
 
 import br.com.booknrest.booknrest.entities.Restaurante;
 import br.com.booknrest.booknrest.application.CadastroDeRestauranteUseCase;
@@ -49,9 +49,6 @@ public class RestauranteController {
             @ExampleObject(name = "Exemplo de cadastro de novo restaurante", value = RESTAURANTE)
     }))
     public ResponseEntity<Restaurante> novoRestaurante(@RequestBody Restaurante req){
-
-        //precoService.validar
-
         Restaurante restaurante = cadastroDeRestauranteUseCase.salvaRestaurante(req);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -64,9 +61,6 @@ public class RestauranteController {
     @GetMapping()
     @Operation(summary = "Todos os restaurantes", description = "Obtenha todos os restaurantes")
     public ResponseEntity<List<Restaurante>> todosOsRestaurantes(){
-
-        //precoService.validar
-
         List<Restaurante> restaurantes = cadastroDeRestauranteUseCase.obtemRestaurantes();
 
         return ResponseEntity.ok(restaurantes);
