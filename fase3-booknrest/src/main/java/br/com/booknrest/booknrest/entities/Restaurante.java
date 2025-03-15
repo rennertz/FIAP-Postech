@@ -1,6 +1,5 @@
-package br.com.booknrest.booknrest.model;
+package br.com.booknrest.booknrest.entities;
 
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -11,33 +10,31 @@ import java.util.List;
 import static java.util.Collections.unmodifiableList;
 
 @Data
-@Entity
 public class Restaurante {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String localizacao;
     private String tipoCozinha;
 
     @Setter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HorarioDeFuncionamento> horarioDeFuncionamento = new ArrayList<>();
 
     private int capacidade;
 
+    public Restaurante(Long id, String nome, String localizacao, String tipoCozinha, int capacidade) {
+        this.id = id;
+        this.nome = nome;
+        this.localizacao = localizacao;
+        this.tipoCozinha = tipoCozinha;
+        this.capacidade = capacidade;
+    }
 
     public void adicionaHorarioDeFuncionamento(HorarioDeFuncionamento horario) {
         horario.setRestaurante(this); // Ensure the bidirectional link is set
         this.horarioDeFuncionamento.add(horario);
     }
 
-    public void removeHorarioDeFuncionamento(HorarioDeFuncionamento horario) {
-        horario.setRestaurante(null);
-        this.horarioDeFuncionamento.remove(horario);
-    }
-
-    public List<HorarioDeFuncionamento> getHorarioDeFuncionamento(HorarioDeFuncionamento horario) {
+    public List<HorarioDeFuncionamento> getHorarioDeFuncionamento() {
         return unmodifiableList(this.horarioDeFuncionamento);
     }
 }

@@ -1,7 +1,7 @@
 package br.com.booknrest.booknrest.controllers;
 
-import br.com.booknrest.booknrest.model.Restaurante;
-import br.com.booknrest.booknrest.services.RestauranteService;
+import br.com.booknrest.booknrest.entities.Restaurante;
+import br.com.booknrest.booknrest.application.CadastroDeRestauranteUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -35,10 +35,10 @@ public class RestauranteController {
         }
     """;
 
-    final RestauranteService restauranteService;
+    final CadastroDeRestauranteUseCase cadastroDeRestauranteUseCase;
 
-    public RestauranteController(RestauranteService restauranteService) {
-        this.restauranteService = restauranteService;
+    public RestauranteController(CadastroDeRestauranteUseCase cadastroDeRestauranteUseCase) {
+        this.cadastroDeRestauranteUseCase = cadastroDeRestauranteUseCase;
     }
 
     @PostMapping()
@@ -52,7 +52,7 @@ public class RestauranteController {
 
         //precoService.validar
 
-        Restaurante restaurante = restauranteService.salvaRestaurante(req);
+        Restaurante restaurante = cadastroDeRestauranteUseCase.salvaRestaurante(req);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .buildAndExpand(restaurante.getId())
@@ -67,7 +67,7 @@ public class RestauranteController {
 
         //precoService.validar
 
-        List<Restaurante> restaurantes = restauranteService.obtemRestaurantes();
+        List<Restaurante> restaurantes = cadastroDeRestauranteUseCase.obtemRestaurantes();
 
         return ResponseEntity.ok(restaurantes);
     }
