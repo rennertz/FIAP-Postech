@@ -2,10 +2,12 @@ package br.com.booknrest.booknrest.infra.persistence.restaurante;
 
 import br.com.booknrest.booknrest.entities.HorarioDeFuncionamento;
 import br.com.booknrest.booknrest.entities.Restaurante;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RestauranteEntityMapper {
 
-    public static RestauranteEntity toEntity(Restaurante restaurante) {
+    public RestauranteEntity toEntity(Restaurante restaurante) {
         RestauranteEntity restauranteEntity = new RestauranteEntity(
                 restaurante.getId(),
                 restaurante.getNome(),
@@ -23,7 +25,7 @@ public class RestauranteEntityMapper {
     }
 
 
-    public static HorarioDeFuncionamentoEntity toEntity(HorarioDeFuncionamento horario) {
+    private HorarioDeFuncionamentoEntity toEntity(HorarioDeFuncionamento horario) {
         return new HorarioDeFuncionamentoEntity(
                 horario.getId(),
                 horario.getDiaDaSemana(),
@@ -32,7 +34,7 @@ public class RestauranteEntityMapper {
         );
     }
 
-    public static Restaurante toDomain(RestauranteEntity restauranteEntity) {
+    public Restaurante toDomain(RestauranteEntity restauranteEntity) {
         Restaurante restaurante = new Restaurante(
                 restauranteEntity.getId(),
                 restauranteEntity.getNome(),
@@ -49,7 +51,7 @@ public class RestauranteEntityMapper {
         return restaurante;
     }
 
-    public static HorarioDeFuncionamento toDomain(HorarioDeFuncionamentoEntity horario) {
+    private HorarioDeFuncionamento toDomain(HorarioDeFuncionamentoEntity horario) {
         return new HorarioDeFuncionamento(
                 horario.getId(),
                 horario.getDiaDaSemana(),
