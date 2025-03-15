@@ -24,7 +24,7 @@ public class RestauranteController {
           "nome": "Restaurante Magnífico",
           "localizacao": "Rua dos bobos, 0",
           "tipoCozinha": "francesa",
-          "horarioDeFuncionamento": [
+          "horariosDeFuncionamento": [
             {
               "diaDaSemana": "MONDAY",
               "horaAbertura": "18:00",

@@ -16,7 +16,7 @@ public class RestauranteEntityMapper {
                 restaurante.getCapacidade()
         );
 
-        restaurante.getHorarioDeFuncionamento().forEach(horario -> {
+        restaurante.getHorariosDeFuncionamento().forEach(horario -> {
             HorarioDeFuncionamentoEntity horarioEntity = toEntity(horario);
             restauranteEntity.adicionaHorarioDeFuncionamento(horarioEntity);
         });
@@ -43,7 +43,7 @@ public class RestauranteEntityMapper {
                 restauranteEntity.getCapacidade()
         );
 
-        restauranteEntity.getHorarioDeFuncionamento().forEach(horarioEntity -> {
+        restauranteEntity.getHorariosDeFuncionamento().forEach(horarioEntity -> {
             HorarioDeFuncionamento horario = toDomain(horarioEntity);
             restaurante.adicionaHorarioDeFuncionamento(horario);
         });

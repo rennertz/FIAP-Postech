@@ -1,25 +1,22 @@
 package br.com.booknrest.booknrest.entities;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Setter;
+import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Collections.unmodifiableList;
 
-@Data
 public class Restaurante {
-    private Long id;
-    private String nome;
-    private String localizacao;
-    private String tipoCozinha;
+    private final Long id;
+    private final String nome;
+    private final String localizacao;
+    private final String tipoCozinha;
 
-    @Setter(AccessLevel.NONE)
-    private List<HorarioDeFuncionamento> horarioDeFuncionamento = new ArrayList<>();
+    private final List<HorarioDeFuncionamento> horariosDeFuncionamento = new ArrayList<>();
 
-    private int capacidade;
+    private final int capacidade;
 
     public Restaurante(Long id, String nome, String localizacao, String tipoCozinha, int capacidade) {
         this.id = id;
@@ -30,11 +27,65 @@ public class Restaurante {
     }
 
     public void adicionaHorarioDeFuncionamento(HorarioDeFuncionamento horario) {
-        horario.setRestaurante(this); // Ensure the bidirectional link is set
-        this.horarioDeFuncionamento.add(horario);
+        horariosDeFuncionamento.forEach(horarioExistente ->
+                validaSeConflita(horario, horarioExistente));
+        this.horariosDeFuncionamento.add(horario);
     }
 
-    public List<HorarioDeFuncionamento> getHorarioDeFuncionamento() {
-        return unmodifiableList(this.horarioDeFuncionamento);
+    private void validaSeConflita(HorarioDeFuncionamento horario, HorarioDeFuncionamento horarioExistente) {
+        if (estaSobrepondo(horario, horarioExistente)) {
+            throw new ErroDeValidacao("Horários conflitantes: ");
+        }
+    }
+
+    private boolean estaSobrepondo(HorarioDeFuncionamento horario, HorarioDeFuncionamento horarioExistente) {
+        return !horario.getHoraFechamento().isBefore(horarioExistente.getHoraAbertura()) &&
+                !horario.getHoraAbertura().isAfter(horarioExistente.getHoraFechamento());
+    }
+
+    public List<HorarioDeFuncionamento> getHorariosDeFuncionamento() {
+        return unmodifiableList(this.horariosDeFuncionamento);
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    public String getLocalizacao() {
+        return this.localizacao;
+    }
+
+    public String getTipoCozinha() {
+        return this.tipoCozinha;
+    }
+
+    public int getCapacidade() {
+        return this.capacidade;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Restaurante that = (Restaurante) o;
+        return capacidade == that.capacidade &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(nome, that.nome) &&
+                Objects.equals(localizacao, that.localizacao) &&
+                Objects.equals(tipoCozinha, that.tipoCozinha) &&
+                Objects.equals(horariosDeFuncionamento, that.horariosDeFuncionamento);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, localizacao, tipoCozinha, horariosDeFuncionamento, capacidade);
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurante(id=" + this.getId() + ", nome=" + this.getNome() + ", localizacao=" + this.getLocalizacao() + ", tipoCozinha=" + this.getTipoCozinha() + ", horariosDeFuncionamento=" + this.getHorariosDeFuncionamento() + ", capacidade=" + this.getCapacidade() + ")";
     }
 }
