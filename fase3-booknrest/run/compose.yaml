@@ -5,6 +5,8 @@ services:
   booknrest:
     container_name: booknrest
     image: booknrest:latest
+    environment:
+      - DB_URL=jdbc:postgresql://postgres:5432/mydatabase
     build:
       context: ../
       dockerfile: ./Dockerfile
