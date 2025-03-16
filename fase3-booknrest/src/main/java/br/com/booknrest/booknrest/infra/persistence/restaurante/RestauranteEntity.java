@@ -14,6 +14,8 @@ public class RestauranteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true, nullable = false)
     private String nome;
     private String localizacao;
     private String tipoCozinha;

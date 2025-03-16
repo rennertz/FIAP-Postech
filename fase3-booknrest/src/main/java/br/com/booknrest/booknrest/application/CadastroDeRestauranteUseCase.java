@@ -1,6 +1,7 @@
 package br.com.booknrest.booknrest.application;
 
 import br.com.booknrest.booknrest.entities.Restaurante;
+import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
 import br.com.booknrest.booknrest.gateway.RestauranteGateway;
 import org.springframework.stereotype.Service;
 
@@ -9,17 +10,20 @@ import java.util.List;
 @Service
 public class CadastroDeRestauranteUseCase {
 
-    final RestauranteGateway restauranteGateway;
+    final RestauranteGateway gateway;
 
-    public CadastroDeRestauranteUseCase(RestauranteGateway restauranteGateway) {
-        this.restauranteGateway = restauranteGateway;
+    public CadastroDeRestauranteUseCase(RestauranteGateway gateway) {
+        this.gateway = gateway;
     }
 
     public Restaurante salvaRestaurante(Restaurante req) {
-        return restauranteGateway.cadastra(req);
+        gateway.obtemPeloNome(req.getNome()).ifPresent(restaurante -> {
+            throw new ErroDeValidacao("Restaurante com o mesmo nome já existe");
+        });
+        return gateway.cadastra(req);
     }
 
     public List<Restaurante> obtemRestaurantes() {
-        return restauranteGateway.buscaTodos();
+        return gateway.buscaTodos();
     }
 }
