@@ -41,7 +41,6 @@ public class Restaurante {
         Map<DayOfWeek, Long> contagemPorDia = horariosDeFuncionamento.stream().collect(Collectors.groupingBy(
                 HorarioDeFuncionamento::getDiaDaSemana, Collectors.counting()
         ));
-        System.out.println(contagemPorDia);
 
         contagemPorDia.entrySet().stream()
                 .filter(horariosNoDia -> horariosNoDia.getValue() > 2)
