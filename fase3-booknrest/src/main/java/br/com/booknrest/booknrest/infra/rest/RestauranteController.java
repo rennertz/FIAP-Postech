@@ -44,12 +44,14 @@ public class RestauranteController {
     @PostMapping()
     @Operation(summary = "Novo restaurante", description = "Informe os dados do novo restaurante")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content =
-    @Content(mediaType = "application/json", schema =
-    @Schema(implementation = Restaurante.class), examples = {
-            @ExampleObject(name = "Exemplo de cadastro de novo restaurante", value = RESTAURANTE)
-    }))
-    public ResponseEntity<Restaurante> novoRestaurante(@RequestBody Restaurante req){
-        Restaurante restaurante = cadastroDeRestauranteUseCase.salvaRestaurante(req);
+        @Content(mediaType = "application/json", schema =
+            @Schema(implementation = RestauranteDTO.class), examples = {
+                    @ExampleObject(name = "Exemplo de cadastro de novo restaurante", value = RESTAURANTE)
+            }))
+    public ResponseEntity<Restaurante> novoRestaurante(@RequestBody RestauranteDTO req){
+        Restaurante novoRestaurante = RestauranteDTO.toModel(req);
+
+        Restaurante restaurante = cadastroDeRestauranteUseCase.salvaRestaurante(novoRestaurante);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .buildAndExpand(restaurante.getId())
