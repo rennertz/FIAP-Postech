@@ -19,7 +19,7 @@ import java.util.List;
 @Tag(name="0. Cadastro e busca de restaurantes")
 public class RestauranteController {
 
-    private static final String RESTAURANTE = """
+    static final String RESTAURANTE = """
         {
           "nome": "Restaurante Magnífico",
           "localizacao": "Rua dos bobos, 0",
