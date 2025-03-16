@@ -2,9 +2,12 @@ package br.com.booknrest.booknrest.entities;
 
 import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableList;
 
@@ -29,7 +32,23 @@ public class Restaurante {
     public void adicionaHorarioDeFuncionamento(HorarioDeFuncionamento horario) {
         horariosDeFuncionamento.forEach(horarioExistente ->
                 validaSeConflita(horario, horarioExistente));
+
         this.horariosDeFuncionamento.add(horario);
+        validaApenasDoisHorariosPorDia();
+    }
+
+    private void validaApenasDoisHorariosPorDia() {
+        Map<DayOfWeek, Long> contagemPorDia = horariosDeFuncionamento.stream().collect(Collectors.groupingBy(
+                HorarioDeFuncionamento::getDiaDaSemana, Collectors.counting()
+        ));
+        System.out.println(contagemPorDia);
+
+        contagemPorDia.entrySet().stream()
+                .filter(horariosNoDia -> horariosNoDia.getValue() > 2)
+                .findAny()
+                .ifPresent(count -> {
+                        throw new ErroDeValidacao("Não é permitido mais de 2 horarios por dia da semana");
+                });
     }
 
     private void validaSeConflita(HorarioDeFuncionamento horario, HorarioDeFuncionamento horarioExistente) {
