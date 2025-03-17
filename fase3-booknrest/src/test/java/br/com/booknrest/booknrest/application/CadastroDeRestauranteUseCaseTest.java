@@ -38,10 +38,11 @@ class CadastroDeRestauranteUseCaseTest {
 
     @Test
     void restauranteJaCadastrado() {
-        when(gatewayMock.obtemPeloNome(anyString())).thenReturn(Optional.of(getRestaurante()));
+        Restaurante restaurante = getRestaurante();
+        when(gatewayMock.obtemPeloNome(anyString())).thenReturn(Optional.of(restaurante));
 
         assertThrows(ErroDeValidacao.class, () ->
-            cadastroDeRestaurante.salvaRestaurante(getRestaurante())
+            cadastroDeRestaurante.salvaRestaurante(restaurante)
         );
     }
 

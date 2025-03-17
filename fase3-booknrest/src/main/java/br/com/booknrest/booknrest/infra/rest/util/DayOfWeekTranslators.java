@@ -14,6 +14,10 @@ import java.util.Locale;
 import java.util.Map;
 
 public class DayOfWeekTranslators {
+    private DayOfWeekTranslators() {
+        // classe agrupadora
+    }
+
     public static class Deserializer extends JsonDeserializer<DayOfWeek> {
 
         private static final Map<String, DayOfWeek> DAY_NAMES_PT = Map.of(

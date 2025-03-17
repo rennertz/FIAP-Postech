@@ -1,6 +1,6 @@
 #Build stage
 
-FROM maven AS buildstage
+FROM maven:3 AS buildstage
 WORKDIR /usr/app/
 COPY . .
 RUN mvn install
@@ -22,4 +22,4 @@ COPY --from=buildstage $APP_HOME .
 EXPOSE 8080
 
 # Comando para executar a aplicação
-ENTRYPOINT exec java -jar $APP_HOME/target/*.jar
+ENTRYPOINT ["exec", "java", "-jar", "$APP_HOME/target/*.jar"]
