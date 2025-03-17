@@ -5,6 +5,8 @@ import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.Objects;
 
 public class HorarioDeFuncionamento {
@@ -61,6 +63,8 @@ public class HorarioDeFuncionamento {
 
     @Override
     public String toString() {
-        return "HorarioDeFuncionamento(id=" + this.getId() + ", diaDaSemana=" + this.getDiaDaSemana() + ", horaAbertura=" + this.getHoraAbertura() + ", horaFechamento=" + this.getHoraFechamento() + ")";
+        Locale localePT = new Locale("pt", "BR"); // Portuguese (Brazil)
+        String dia = this.getDiaDaSemana().getDisplayName(TextStyle.SHORT, localePT);
+        return dia + " entre " + this.getHoraAbertura() + " e " + this.getHoraFechamento();
     }
 }

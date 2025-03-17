@@ -52,7 +52,7 @@ public class Restaurante {
 
     private void validaSeConflita(HorarioDeFuncionamento horario, HorarioDeFuncionamento horarioExistente) {
         if (estaSobrepondo(horario, horarioExistente)) {
-            throw new ErroDeValidacao("Horários conflitantes: ");
+            throw new ErroDeValidacao("Horários conflitantes: "+horarioExistente+" e "+horario);
         }
     }
 

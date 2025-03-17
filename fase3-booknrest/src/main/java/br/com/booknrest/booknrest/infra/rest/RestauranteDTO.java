@@ -2,7 +2,10 @@ package br.com.booknrest.booknrest.infra.rest;
 
 import br.com.booknrest.booknrest.entities.HorarioDeFuncionamento;
 import br.com.booknrest.booknrest.entities.Restaurante;
+import br.com.booknrest.booknrest.infra.rest.util.DayOfWeekTranslators;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -31,6 +34,8 @@ public record RestauranteDTO(
             Long id,
 
             @NotNull
+            @JsonSerialize(using = DayOfWeekTranslators.Serializer.class)
+            @JsonDeserialize(using = DayOfWeekTranslators.Deserializer.class)
             DayOfWeek diaDaSemana,
 
             @NotNull
@@ -53,5 +58,14 @@ public record RestauranteDTO(
                         novoRestaurante::adicionaHorarioDeFuncionamento);
 
         return novoRestaurante;
+    }
+
+    static RestauranteDTO toDTO(Restaurante req) {
+        var horarios = req.getHorariosDeFuncionamento().stream()
+                .map(horario ->
+                        new HorarioDeFuncionamentoDTO(horario.getId(), horario.getDiaDaSemana(), horario.getHoraAbertura(), horario.getHoraFechamento()))
+                .toList();
+
+        return new RestauranteDTO(req.getId(), req.getNome(), req.getLocalizacao(), req.getTipoCozinha(), horarios, req.getCapacidade());
     }
 }

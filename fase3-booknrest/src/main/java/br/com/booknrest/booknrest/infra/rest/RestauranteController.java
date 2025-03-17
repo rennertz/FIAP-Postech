@@ -27,7 +27,7 @@ public class RestauranteController {
           "tipoCozinha": "francesa",
           "horariosDeFuncionamento": [
             {
-              "diaDaSemana": "MONDAY",
+              "diaDaSemana": "segunda-feira",
               "horaAbertura": "18:00",
               "horaFechamento": "23:00"
             }
@@ -49,7 +49,7 @@ public class RestauranteController {
             @Schema(implementation = RestauranteDTO.class), examples = {
                     @ExampleObject(name = "Exemplo de cadastro de novo restaurante", value = RESTAURANTE)
             }))
-    public ResponseEntity<Restaurante> novoRestaurante(@Valid @RequestBody RestauranteDTO req){
+    public ResponseEntity<RestauranteDTO> novoRestaurante(@Valid @RequestBody RestauranteDTO req){
         Restaurante novoRestaurante = RestauranteDTO.toModel(req);
 
         Restaurante restaurante = cadastroDeRestauranteUseCase.salvaRestaurante(novoRestaurante);
@@ -58,14 +58,18 @@ public class RestauranteController {
                 .buildAndExpand(restaurante.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(restaurante);
+        return ResponseEntity.created(location)
+                .body(RestauranteDTO.toDTO(restaurante));
     }
 
     @GetMapping()
     @Operation(summary = "Todos os restaurantes", description = "Obtenha todos os restaurantes")
-    public ResponseEntity<List<Restaurante>> todosOsRestaurantes(){
+    public ResponseEntity<List<RestauranteDTO>> todosOsRestaurantes(){
         List<Restaurante> restaurantes = cadastroDeRestauranteUseCase.obtemRestaurantes();
 
-        return ResponseEntity.ok(restaurantes);
+        List<RestauranteDTO> response = restaurantes.stream()
+                .map(RestauranteDTO::toDTO)
+                .toList();
+        return ResponseEntity.ok(response);
     }
 }
