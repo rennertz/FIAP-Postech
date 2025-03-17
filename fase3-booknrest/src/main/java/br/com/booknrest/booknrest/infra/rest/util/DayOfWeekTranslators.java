@@ -40,7 +40,7 @@ public class DayOfWeekTranslators {
     }
 
     public static class Serializer extends JsonSerializer<DayOfWeek> {
-        private static final Locale LOCALE_PT = new Locale("pt", "BR"); // Portuguese (Brazil)
+        private static final Locale LOCALE_PT = Locale.of("pt", "BR");
 
         @Override
         public void serialize(DayOfWeek dayOfWeek, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)

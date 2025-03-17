@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RestauranteIntegrityTest {
@@ -19,16 +20,20 @@ class RestauranteIntegrityTest {
 
     @Test
     void horarioTrocado() {
-        assertThrows(ErroDeValidacao.class, () ->
-            new HorarioDeFuncionamento(1L, DayOfWeek.MONDAY, LocalTime.of(23, 0), LocalTime.of(19, 0))
+        Throwable throwable = catchThrowable(() ->
+                new HorarioDeFuncionamento(1L, DayOfWeek.MONDAY, LocalTime.of(23, 0), LocalTime.of(19, 0))
         );
+        assertThat(throwable).isInstanceOf(ErroDeValidacao.class)
+                .hasMessage("O horário de fechamento deve ser após o horário de abertura");
     }
 
     @Test
     void horarioCurto() {
-        assertThrows(ErroDeValidacao.class, () ->
+        Throwable throwable = catchThrowable(() ->
                 new HorarioDeFuncionamento(1L, DayOfWeek.MONDAY, LocalTime.of(19, 0), LocalTime.of(19, 30))
         );
+        assertThat(throwable).isInstanceOf(ErroDeValidacao.class)
+                .hasMessage("O Horário de abertura deve durar no mínimo 1 hora");
     }
 
     @Test
@@ -40,9 +45,11 @@ class RestauranteIntegrityTest {
         assertDoesNotThrow(() ->
                 restaurante.adicionaHorarioDeFuncionamento(horario1)
         );
-        assertThrows(ErroDeValidacao.class, () ->
+        Throwable throwable = catchThrowable(() ->
                 restaurante.adicionaHorarioDeFuncionamento(horario2)
         );
+        assertThat(throwable).isInstanceOf(ErroDeValidacao.class)
+                .hasMessage("Horários conflitantes: seg. entre 19:00 e 22:00 e seg. entre 20:00 e 23:00");
     }
 
     @Test
@@ -60,8 +67,10 @@ class RestauranteIntegrityTest {
         );
 
         // deve falhar no 3o horário adicionado na segunda
-        assertThrows(ErroDeValidacao.class, () ->
+        Throwable throwable = catchThrowable(() ->
                 restaurante.adicionaHorarioDeFuncionamento(horario3)
         );
+        assertThat(throwable).isInstanceOf(ErroDeValidacao.class)
+                .hasMessage("Não é permitido mais de 2 horarios por dia da semana");
     }
 }

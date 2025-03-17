@@ -63,7 +63,7 @@ public class HorarioDeFuncionamento {
 
     @Override
     public String toString() {
-        Locale localePT = new Locale("pt", "BR"); // Portuguese (Brazil)
+        Locale localePT = Locale.of("pt", "BR");
         String dia = this.getDiaDaSemana().getDisplayName(TextStyle.SHORT, localePT);
         return dia + " entre " + this.getHoraAbertura() + " e " + this.getHoraFechamento();
     }
