@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/FIAP-Postech.iml" filepath="$PROJECT_DIR$/.idea/FIAP-Postech.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fase1-vetvision/Vetvision/Vetvision.iml" filepath="$PROJECT_DIR$/fase1-vetvision/Vetvision/Vetvision.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fase3-booknrest/booknrest.iml" filepath="$PROJECT_DIR$/fase3-booknrest/booknrest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/parquimetro.main.iml" filepath="$PROJECT_DIR$/.idea/modules/parquimetro.main.iml" />
     </modules>
   </component>

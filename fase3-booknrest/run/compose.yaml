@@ -1,0 +1,16 @@
+include:
+  - dependencies.yaml
+
+services:
+  booknrest:
+    container_name: booknrest
+    image: booknrest:latest
+    environment:
+      - DB_URL=jdbc:postgresql://postgres:5432/mydatabase
+    build:
+      context: ../
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
