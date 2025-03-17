@@ -1,7 +1,6 @@
 package br.com.booknrest.booknrest.entities;
 
 import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -11,11 +10,7 @@ import java.util.Objects;
 public class HorarioDeFuncionamento {
     private final Long id;
     private final DayOfWeek diaDaSemana;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private final LocalTime horaAbertura;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private final LocalTime horaFechamento;
 
     public HorarioDeFuncionamento(Long id, DayOfWeek diaDaSemana, LocalTime horaAbertura, LocalTime horaFechamento) {

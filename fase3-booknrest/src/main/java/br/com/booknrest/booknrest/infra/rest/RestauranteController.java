@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -48,7 +49,7 @@ public class RestauranteController {
             @Schema(implementation = RestauranteDTO.class), examples = {
                     @ExampleObject(name = "Exemplo de cadastro de novo restaurante", value = RESTAURANTE)
             }))
-    public ResponseEntity<Restaurante> novoRestaurante(@RequestBody RestauranteDTO req){
+    public ResponseEntity<Restaurante> novoRestaurante(@Valid @RequestBody RestauranteDTO req){
         Restaurante novoRestaurante = RestauranteDTO.toModel(req);
 
         Restaurante restaurante = cadastroDeRestauranteUseCase.salvaRestaurante(novoRestaurante);
