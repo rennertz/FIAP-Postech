@@ -65,6 +65,7 @@ public class RestauranteController {
     @GetMapping()
     @Operation(summary = "Todos os restaurantes", description = "Obtenha todos os restaurantes")
     public ResponseEntity<List<RestauranteDTO>> todosOsRestaurantes(){
+        // TODO implementar paginação
         List<Restaurante> restaurantes = cadastroDeRestauranteUseCase.obtemRestaurantes();
 
         List<RestauranteDTO> response = restaurantes.stream()

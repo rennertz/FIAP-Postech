@@ -1,4 +1,4 @@
-package br.com.booknrest.booknrest.infra.rest;
+package br.com.booknrest.booknrest.infra.rest.util;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;

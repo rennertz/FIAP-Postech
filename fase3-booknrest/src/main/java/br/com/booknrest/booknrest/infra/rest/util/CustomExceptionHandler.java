@@ -1,4 +1,4 @@
-package br.com.booknrest.booknrest.infra.rest;
+package br.com.booknrest.booknrest.infra.rest.util;
 
 import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
 import io.swagger.v3.oas.annotations.Hidden;

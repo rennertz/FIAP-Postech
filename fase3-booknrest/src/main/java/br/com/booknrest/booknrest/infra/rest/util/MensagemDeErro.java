@@ -1,4 +1,4 @@
-package br.com.booknrest.booknrest.infra.rest;
+package br.com.booknrest.booknrest.infra.rest.util;
 
 import org.springframework.http.HttpStatus;
 
