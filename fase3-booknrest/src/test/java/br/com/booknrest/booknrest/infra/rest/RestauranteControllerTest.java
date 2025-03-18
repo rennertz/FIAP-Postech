@@ -9,12 +9,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 import static br.com.booknrest.booknrest.infra.rest.RestauranteController.RESTAURANTE;
 import static io.restassured.RestAssured.given;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -67,6 +69,7 @@ class RestauranteControllerTest {
                 .when().get("/booknrest/v1/restaurantes")
                 .then()
                 .statusCode(200)
+                .body("[0].horariosDeFuncionamento.diaDaSemana", contains("sabado"))
                 .extract().body()
                 .jsonPath().getList(".", RestauranteDTO.class);
 
@@ -75,5 +78,14 @@ class RestauranteControllerTest {
         RestauranteDTO restaurante = list.getFirst();
         assertThat(restaurante.id()).isEqualTo(1);
         assertThat(restaurante.nome()).isEqualTo("O Melhor");
+
+        var horarioDeFuncionamentoDTOS = restaurante.horariosDeFuncionamento();
+
+        assertThat(horarioDeFuncionamentoDTOS)
+                .isNotNull()
+                .hasSize(1);
+        var first = horarioDeFuncionamentoDTOS.getFirst();
+        assertThat(first.diaDaSemana()).isEqualTo(DayOfWeek.SATURDAY);
+
     }
 }

@@ -6,4 +6,4 @@ VALUES
 INSERT INTO horario_de_funcionamento
     (dia_da_semana, hora_abertura, hora_fechamento, restaurante_id)
 VALUES
-    ('MONDAY', '18:00:00', '23:00:00',(SELECT id FROM restaurante WHERE nome='O Melhor'));
+    ('SATURDAY', '18:00:00', '23:00:00',(SELECT id FROM restaurante WHERE nome='O Melhor'));

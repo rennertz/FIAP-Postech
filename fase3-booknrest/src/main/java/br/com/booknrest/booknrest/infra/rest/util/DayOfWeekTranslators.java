@@ -9,34 +9,37 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 import java.time.DayOfWeek;
-import java.time.format.TextStyle;
-import java.util.Locale;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toMap;
+
 public class DayOfWeekTranslators {
+    private static final Map<String, DayOfWeek> FROM_PT = Map.of(
+            "segunda-feira", DayOfWeek.MONDAY,
+            "terça-feira", DayOfWeek.TUESDAY,
+            "quarta-feira", DayOfWeek.WEDNESDAY,
+            "quinta-feira", DayOfWeek.THURSDAY,
+            "sexta-feira", DayOfWeek.FRIDAY,
+            "sabado", DayOfWeek.SATURDAY,
+            "domingo", DayOfWeek.SUNDAY
+    );
+    private static final Map<DayOfWeek, String> TO_PT = FROM_PT.entrySet()
+            .stream().collect(
+                    toMap(Map.Entry::getValue, Map.Entry::getKey));
+
+
     private DayOfWeekTranslators() {
-        // classe agrupadora
+        // classe agrupadora, não deve ser instanciada
     }
 
     public static class Deserializer extends JsonDeserializer<DayOfWeek> {
-
-        private static final Map<String, DayOfWeek> DAY_NAMES_PT = Map.of(
-                "segunda-feira", DayOfWeek.MONDAY,
-                "terça-feira", DayOfWeek.TUESDAY,
-                "quarta-feira", DayOfWeek.WEDNESDAY,
-                "quinta-feira", DayOfWeek.THURSDAY,
-                "sexta-feira", DayOfWeek.FRIDAY,
-                "sabado", DayOfWeek.SATURDAY,
-                "domingo", DayOfWeek.SUNDAY
-        );
-
         @Override
         public DayOfWeek deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
-            String dayName = jsonParser.getText().toLowerCase(); // Ensure lowercase for case-insensitivity
-            DayOfWeek dayOfWeek = DAY_NAMES_PT.get(dayName);
+            String nomeDoDia = jsonParser.getText().toLowerCase(); // Ensure lowercase for case-insensitivity
+            DayOfWeek dayOfWeek = FROM_PT.get(nomeDoDia);
 
             if (dayOfWeek == null) {
-                throw new IllegalArgumentException("Invalid day name: " + dayName);
+                throw new IllegalArgumentException("Nome do dia inválido: " + nomeDoDia + ". Valores possíveis: " + FROM_PT.keySet());
             }
 
             return dayOfWeek;
@@ -44,13 +47,11 @@ public class DayOfWeekTranslators {
     }
 
     public static class Serializer extends JsonSerializer<DayOfWeek> {
-        private static final Locale LOCALE_PT = Locale.of("pt", "BR");
-
         @Override
         public void serialize(DayOfWeek dayOfWeek, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
                 throws IOException {
-            String translatedDay = dayOfWeek.getDisplayName(TextStyle.FULL, LOCALE_PT);
-            jsonGenerator.writeString(translatedDay);
+
+            jsonGenerator.writeString(TO_PT.get(dayOfWeek));
         }
     }
 }
