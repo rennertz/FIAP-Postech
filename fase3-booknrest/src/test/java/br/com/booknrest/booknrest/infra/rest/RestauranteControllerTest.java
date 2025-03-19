@@ -30,6 +30,7 @@ class RestauranteControllerTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
 
     @Nested
@@ -39,8 +40,9 @@ class RestauranteControllerTest {
             given()
                     .contentType(ContentType.JSON)
                     .body(RESTAURANTE)
-                    .when().post("/booknrest/v1/restaurantes")
-                    .then()
+            .when()
+                    .post("/booknrest/v1/restaurantes")
+            .then()
                     .statusCode(201);
         }
 
@@ -49,8 +51,9 @@ class RestauranteControllerTest {
             given()
                     .contentType(ContentType.JSON)
                     .body("{}")
-                    .when().post("/booknrest/v1/restaurantes")
-                    .then()
+            .when()
+                    .post("/booknrest/v1/restaurantes")
+            .then()
                     .statusCode(400)
                     .body("message", containsString("nome: não deve estar em branco"))
                     .body("message", containsString("localizacao: não deve estar em branco"))
@@ -65,9 +68,11 @@ class RestauranteControllerTest {
 
     @Test
     void deveListarRestaurantes() {
-        List<RestauranteDTO> list = given()
-                .when().get("/booknrest/v1/restaurantes")
-                .then()
+        List<RestauranteDTO> list =
+            given()
+            .when()
+                .get("/booknrest/v1/restaurantes")
+            .then()
                 .statusCode(200)
                 .body("[0].horariosDeFuncionamento.diaDaSemana", contains("sabado"))
                 .extract().body()
