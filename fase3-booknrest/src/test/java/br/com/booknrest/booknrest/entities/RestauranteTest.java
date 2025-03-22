@@ -9,7 +9,7 @@ import java.time.LocalTime;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class RestauranteIntegrityTest {
+class RestauranteTest {
 
     @Test
     void horarioValido() {

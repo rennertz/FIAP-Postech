@@ -158,6 +158,11 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.5.2</version>
 				<configuration>
+					<excludes>
+						<exclude>**/*IT.java</exclude>
+						<exclude>**/*IT$*.class</exclude>
+						<exclude>**/bdd/**</exclude>
+					</excludes>
 					<properties>
 						<configurationParameters>
 							cucumber.junit-platform.naming-strategy=long
