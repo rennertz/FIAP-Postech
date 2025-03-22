@@ -24,6 +24,11 @@ Integration tests
 mvn test -P integration-test
 ```
 
+Integration tests
+```
+mvn test -P system-test
+```
+
 ## Use
 
 http://localhost:8080/booknrest/swagger-ui/index.html
