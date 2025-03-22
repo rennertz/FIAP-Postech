@@ -15,6 +15,7 @@ import java.util.List;
 import static br.com.booknrest.booknrest.infra.rest.RestauranteController.RESTAURANTE;
 import static io.restassured.RestAssured.given;
 
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
@@ -43,7 +44,8 @@ class RestauranteControllerTest {
             .when()
                     .post("/booknrest/v1/restaurantes")
             .then()
-                    .statusCode(201);
+                    .statusCode(201)
+            .body(matchesJsonSchemaInClasspath("schemas/Restaurante.schema.json"));
         }
 
         @Test

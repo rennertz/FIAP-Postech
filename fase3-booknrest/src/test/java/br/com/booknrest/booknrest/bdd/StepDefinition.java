@@ -11,6 +11,7 @@ import java.util.List;
 
 import static br.com.booknrest.booknrest.util.RestauranteHelperFactory.getRestauranteDtoNomeAleatorio;
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -33,7 +34,8 @@ public class StepDefinition {
     @Entao("deve responder que foi criado corretamente")
     public void deve_responder_que_foi_criado_corretamente() {
             response.then()
-                .statusCode(201);
+                .statusCode(201)
+                .body(matchesJsonSchemaInClasspath("schemas/Restaurante.schema.json"));
     }
 
     @Dado("que existe ao menos um restaurante cadastrado")
