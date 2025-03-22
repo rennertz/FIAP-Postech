@@ -23,7 +23,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-class RestauranteControllerTest {
+class RestauranteControllerIT {
 
     @LocalServerPort
     private Integer port;
