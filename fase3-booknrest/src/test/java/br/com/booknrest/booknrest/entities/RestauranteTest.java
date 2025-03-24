@@ -14,6 +14,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class RestauranteTest {
 
     @Test
+    void novoRestauranteInvalido() {
+        assertDoesNotThrow(() -> new Restaurante(null, "Moqueca", "Mooca", "frutos do mar", 150));
+
+        assertThatThrownBy(() -> new Restaurante(null, null, "Mooca", "frutos do mar", 150))
+            .isInstanceOf(ErroDeValidacao.class);
+        assertThatThrownBy(() -> new Restaurante(null, "Moqueca", null, "frutos do mar", 150))
+            .isInstanceOf(ErroDeValidacao.class);
+        assertThatThrownBy(() -> new Restaurante(null, "Moqueca", "Mooca", null, 150))
+            .isInstanceOf(ErroDeValidacao.class);
+        assertThatThrownBy(() -> new Restaurante(null, "Moqueca", "Mooca", "frutos do mar", 0))
+            .isInstanceOf(ErroDeValidacao.class);
+        assertThatThrownBy(() -> new Restaurante(null, "Moqueca", "Mooca", "frutos do mar", -5))
+            .isInstanceOf(ErroDeValidacao.class);
+        assertThatThrownBy(() -> new Restaurante(null, "Moqueca", "Mooca", "frutos do mar", 1001))
+            .isInstanceOf(ErroDeValidacao.class);
+    }
+
+    @Test
     void horarioValido() {
         assertDoesNotThrow(() ->
                 new HorarioDeFuncionamento(1L, DayOfWeek.MONDAY, LocalTime.of(19, 0), LocalTime.of(23, 0))
@@ -77,24 +95,42 @@ class RestauranteTest {
     }
 
     @Test
-    void estaAbertoNoHorario() {
+    void NaoEstaraAbertoNoPassado() {
+        Restaurante restaurante = getRestauranteSegundaFeira();
+
+        LocalDate dia = LocalDate.of(2020, 12, 8);
+        LocalDateTime dataHora = LocalDateTime.of(dia, LocalTime.of(20, 0));
+
+        assertThatThrownBy(() -> restaurante.estaraAbertoNoHorario(dataHora))
+                .isInstanceOf(ErroDeValidacao.class)
+                .hasMessage("A data e hora informada é do passado");
+    }
+
+    @Test
+    void estaraAbertoNoHorario() {
+        Restaurante restaurante = getRestauranteSegundaFeira();
+
+        LocalDate dia = LocalDate.of(2025, 12, 8);
+        boolean estaAbertoNoHorario;
+
+        estaAbertoNoHorario = restaurante.estaraAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(13, 0)));
+        assertThat(estaAbertoNoHorario).isTrue();
+
+        estaAbertoNoHorario = restaurante.estaraAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(16, 0)));
+        assertThat(estaAbertoNoHorario).isFalse();
+
+        estaAbertoNoHorario = restaurante.estaraAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(20, 0)));
+        assertThat(estaAbertoNoHorario).isTrue();
+    }
+
+    private static Restaurante getRestauranteSegundaFeira() {
         HorarioDeFuncionamento horario1 = new HorarioDeFuncionamento(1L, DayOfWeek.MONDAY, LocalTime.of(11, 0), LocalTime.of(15, 0));
         HorarioDeFuncionamento horario2 = new HorarioDeFuncionamento(1L, DayOfWeek.MONDAY, LocalTime.of(19, 0), LocalTime.of(23, 0));
         Restaurante restaurante = getRestaurante();
         restaurante.adicionaHorarioDeFuncionamento(horario1);
         restaurante.adicionaHorarioDeFuncionamento(horario2);
 
-        LocalDate dia = LocalDate.of(2025, 12, 8);
-        boolean estaAbertoNoHorario;
-
-        estaAbertoNoHorario = restaurante.estaAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(13, 0)));
-        assertThat(estaAbertoNoHorario).isTrue();
-
-        estaAbertoNoHorario = restaurante.estaAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(16, 0)));
-        assertThat(estaAbertoNoHorario).isFalse();
-
-        estaAbertoNoHorario = restaurante.estaAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(20, 0)));
-        assertThat(estaAbertoNoHorario).isTrue();
+        return restaurante;
     }
 
     private static Restaurante getRestaurante() {

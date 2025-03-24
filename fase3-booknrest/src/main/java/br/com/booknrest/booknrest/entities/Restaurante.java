@@ -24,6 +24,14 @@ public class Restaurante {
     private final int capacidade;
 
     public Restaurante(Long id, String nome, String localizacao, String tipoCozinha, int capacidade) {
+        if (Objects.isNull(nome) || Objects.isNull(localizacao) || Objects.isNull(tipoCozinha) || capacidade == 0) {
+            throw new ErroDeValidacao("campos nome, localização, tipoCozinha e capacidade devem ser informados");
+        }
+
+        if (capacidade < 0 || capacidade > 1000) {
+            throw new ErroDeValidacao("capacidade deve ser maior que zero e menor que 1000");
+        }
+
         this.id = id;
         this.nome = nome;
         this.localizacao = localizacao;
@@ -67,7 +75,11 @@ public class Restaurante {
         return unmodifiableList(this.horariosDeFuncionamento);
     }
 
-    public boolean estaAbertoNoHorario(LocalDateTime dataHora) {
+    public boolean estaraAbertoNoHorario(LocalDateTime dataHora) {
+        if (dataHora.isBefore(ultimaHora())) {
+            throw new ErroDeValidacao("A data e hora informada é do passado");
+        }
+
         DayOfWeek diaDaSemanaReserva = dataHora.getDayOfWeek();
         LocalTime horarioReserva = dataHora.toLocalTime();
 
@@ -77,6 +89,10 @@ public class Restaurante {
                 .anyMatch(horarioDeFuncionamento ->
                         horarioDeFuncionamento.getHoraAbertura().isBefore(horarioReserva) &&
                         horarioDeFuncionamento.getHoraFechamento().isAfter(horarioReserva));
+    }
+
+    private static LocalDateTime ultimaHora() {
+        return LocalDateTime.now().minusHours(1);
     }
 
     public Long getId() {
