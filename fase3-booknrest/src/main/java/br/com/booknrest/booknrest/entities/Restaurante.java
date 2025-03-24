@@ -3,6 +3,8 @@ package br.com.booknrest.booknrest.entities;
 import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +65,18 @@ public class Restaurante {
 
     public List<HorarioDeFuncionamento> getHorariosDeFuncionamento() {
         return unmodifiableList(this.horariosDeFuncionamento);
+    }
+
+    public boolean estaAbertoNoHorario(LocalDateTime dataHora) {
+        DayOfWeek diaDaSemanaReserva = dataHora.getDayOfWeek();
+        LocalTime horarioReserva = dataHora.toLocalTime();
+
+        return horariosDeFuncionamento.stream()
+                .filter(horarioDeFuncionamento ->
+                    horarioDeFuncionamento.getDiaDaSemana().equals(diaDaSemanaReserva))
+                .anyMatch(horarioDeFuncionamento ->
+                        horarioDeFuncionamento.getHoraAbertura().isBefore(horarioReserva) &&
+                        horarioDeFuncionamento.getHoraFechamento().isAfter(horarioReserva));
     }
 
     public Long getId() {

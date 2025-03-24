@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface RestauranteRepositoryJPA extends CrudRepository<RestauranteEntity, String> {
+public interface RestauranteRepositoryJPA extends CrudRepository<RestauranteEntity, Long> {
 
     Optional<Restaurante> findByNome(String nome);
 }
