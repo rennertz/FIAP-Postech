@@ -1,6 +1,7 @@
 package br.com.booknrest.booknrest.entities;
 
 import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class Restaurante {
     private final int capacidade;
 
     public Restaurante(Long id, String nome, String localizacao, String tipoCozinha, int capacidade) {
-        if (Objects.isNull(nome) || Objects.isNull(localizacao) || Objects.isNull(tipoCozinha) || capacidade == 0) {
+        if (StringUtils.isBlank(nome) || StringUtils.isBlank(localizacao) || StringUtils.isBlank(tipoCozinha) || capacidade == 0) {
             throw new ErroDeValidacao("campos nome, localização, tipoCozinha e capacidade devem ser informados");
         }
 
@@ -87,8 +88,8 @@ public class Restaurante {
                 .filter(horarioDeFuncionamento ->
                     horarioDeFuncionamento.getDiaDaSemana().equals(diaDaSemanaReserva))
                 .anyMatch(horarioDeFuncionamento ->
-                        horarioDeFuncionamento.getHoraAbertura().isBefore(horarioReserva) &&
-                        horarioDeFuncionamento.getHoraFechamento().isAfter(horarioReserva));
+                        !horarioReserva.isBefore(horarioDeFuncionamento.getHoraAbertura()) &&
+                        horarioReserva.isBefore(horarioDeFuncionamento.getHoraFechamento()));
     }
 
     private static LocalDateTime ultimaHora() {

@@ -113,7 +113,10 @@ class RestauranteTest {
         LocalDate dia = LocalDate.of(2025, 12, 8);
         boolean estaAbertoNoHorario;
 
-        estaAbertoNoHorario = restaurante.estaraAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(13, 0)));
+        estaAbertoNoHorario = restaurante.estaraAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(10, 0)));
+        assertThat(estaAbertoNoHorario).isFalse();
+
+        estaAbertoNoHorario = restaurante.estaraAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(11, 0)));
         assertThat(estaAbertoNoHorario).isTrue();
 
         estaAbertoNoHorario = restaurante.estaraAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(16, 0)));
@@ -121,6 +124,9 @@ class RestauranteTest {
 
         estaAbertoNoHorario = restaurante.estaraAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(20, 0)));
         assertThat(estaAbertoNoHorario).isTrue();
+
+        estaAbertoNoHorario = restaurante.estaraAbertoNoHorario(LocalDateTime.of(dia, LocalTime.of(23, 5)));
+        assertThat(estaAbertoNoHorario).isFalse();
     }
 
     private static Restaurante getRestauranteSegundaFeira() {

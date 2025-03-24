@@ -1,5 +1,6 @@
 package br.com.booknrest.booknrest.util;
 
+import br.com.booknrest.booknrest.entities.Restaurante;
 import br.com.booknrest.booknrest.infra.rest.RestauranteDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,10 @@ public class RestauranteHelperFactory {
 
         return new RestauranteDTO(null, RandomNameGenerator.generateName(6),
                 "Mooca", "frutos do mar", list, 160);
+    }
+
+    public static Restaurante getRestauranteNomeAleatorio() {
+        return RestauranteDTO.toModel(getRestauranteDtoNomeAleatorio());
     }
 
     public static String getRestauranteDtoNomeAleatorioJson() {
