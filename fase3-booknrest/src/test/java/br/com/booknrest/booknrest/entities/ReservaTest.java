@@ -4,12 +4,9 @@ import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
 import br.com.booknrest.booknrest.util.RestauranteHelperFactory;
 import org.junit.jupiter.api.Test;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.TemporalAdjusters;
 
+import static br.com.booknrest.booknrest.util.ReservaHelperFactory.getProximoDiaAoAbrir;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,7 +19,7 @@ class ReservaTest {
     void novaReservaInvalida() {
 
         Cliente cliente = CLIENTE;
-        LocalDateTime proximoDiaAoAbrir = getProximoDiaAoAbrir();
+        LocalDateTime proximoDiaAoAbrir = getProximoDiaAoAbrir(RESTAURANTE);
 
         assertDoesNotThrow(() -> new Reserva(RESTAURANTE, cliente, proximoDiaAoAbrir, 6));
 
@@ -55,7 +52,7 @@ class ReservaTest {
 
     @Test
     void confirmarReserva() {
-        Reserva reserva = new Reserva(RESTAURANTE, CLIENTE, getProximoDiaAoAbrir(), 6);
+        Reserva reserva = new Reserva(RESTAURANTE, CLIENTE, getProximoDiaAoAbrir(RESTAURANTE), 6);
         assertDoesNotThrow(reserva::confirmar);
 
         assertThatThrownBy(reserva::confirmar)
@@ -71,17 +68,5 @@ class ReservaTest {
         assertThatThrownBy(reserva::confirmar)
                 .isInstanceOf(ErroDeValidacao.class)
                 .hasMessage("Reserva não pode ser confirmada.");
-    }
-
-    private static LocalDateTime getProximoDiaAoAbrir() {
-        HorarioDeFuncionamento horario = RESTAURANTE.getHorariosDeFuncionamento().getFirst();
-        LocalTime aoAbrir = horario.getHoraAbertura();
-        LocalDate proximoDia = diaNaProximaSemana(horario.getDiaDaSemana()).toLocalDate();
-
-        return LocalDateTime.of(proximoDia, aoAbrir);
-    }
-
-    private static LocalDateTime diaNaProximaSemana(DayOfWeek diaDaSemana) {
-        return LocalDateTime.now().with(TemporalAdjusters.next(diaDaSemana));
     }
 }

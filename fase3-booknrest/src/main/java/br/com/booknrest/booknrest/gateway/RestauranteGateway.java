@@ -48,4 +48,9 @@ public class RestauranteGateway {
     public Optional<Restaurante> obtemPeloNome(String nome) {
         return repository.findByNome(nome);
     }
+
+    public Optional<Restaurante> obtemPeloId(Long restauranteId) {
+        return repository.findById(restauranteId)
+                .map(mapper::toDomain);
+    }
 }

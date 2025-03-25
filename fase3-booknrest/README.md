@@ -2,37 +2,37 @@
 
 Para iniciar a aplicação, execute
 
-```
+```shell
 ./mvnw spring-boot:run
 ```
 
 alternativamente, execute
 
-```
+```shell
 docker compose -f run/compose.yaml up
 ```
 
 ## Test
 
 ### Unity tests
-```
-mvn test
+```shell
+./mvnw test
 ```
 
 ### Integration tests
-```
-mvn test -P integration-test
+```shell
+./mvnw test -P integration-test
 ```
 
 ### System tests
-```
-mvn test -P system-test
+```shell
+./mvnw test -P system-test
 ```
 [Resultado dos testes de sistema](target/cucumber-reports/cucumber.html)
 
 ### Performance tests
-```
-mvn gatling:test -P performance-test
+```shell
+./mvnw gatling:test -P performance-test
 ```
 
 ## Use

@@ -48,7 +48,7 @@ public record RestauranteDTO(
     ) {}
 
 
-    static Restaurante toModel(RestauranteDTO req) {
+    public static Restaurante toModel(RestauranteDTO req) {
         Restaurante novoRestaurante = new Restaurante(req.id(), req.nome(), req.localizacao(), req.tipoCozinha(), req.capacidade());
 
         req.horariosDeFuncionamento().stream()
