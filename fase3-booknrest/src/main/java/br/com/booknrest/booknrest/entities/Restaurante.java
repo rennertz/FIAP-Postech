@@ -62,6 +62,9 @@ public class Restaurante {
     }
 
     private void validaSeConflita(HorarioDeFuncionamento horario, HorarioDeFuncionamento horarioExistente) {
+        if(!horario.getDiaDaSemana().equals(horarioExistente.getDiaDaSemana())) {
+            return;
+        }
         if (estaSobrepondo(horario, horarioExistente)) {
             throw new ErroDeValidacao("Horários conflitantes: "+horarioExistente+" e "+horario);
         }
