@@ -82,4 +82,16 @@ public class Reserva {
         CONFIRMADA,
         CANCELADA
     }
+
+    @Override
+    public String toString() {
+        return "Reserva{" +
+                "id=" + id +
+                ", restaurante=" + restaurante +
+                ", cliente=" + cliente +
+                ", dataHora=" + dataHora +
+                ", quantidadePessoas=" + quantidadePessoas +
+                ", status=" + status +
+                '}';
+    }
 }

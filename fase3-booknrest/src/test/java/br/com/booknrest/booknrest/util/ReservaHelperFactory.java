@@ -14,12 +14,12 @@ public class ReservaHelperFactory {
     public static LocalDateTime getProximoDiaAoAbrir(Restaurante restaurante) {
         HorarioDeFuncionamento horario = restaurante.getHorariosDeFuncionamento().getFirst();
         LocalTime aoAbrir = horario.getHoraAbertura();
-        LocalDate proximoDia = diaNaProximaSemana(horario.getDiaDaSemana()).toLocalDate();
+        LocalDate proximoDia = diaNaProximaSemana(horario.getDiaDaSemana());
 
         return LocalDateTime.of(proximoDia, aoAbrir);
     }
 
-    private static LocalDateTime diaNaProximaSemana(DayOfWeek diaDaSemana) {
-        return LocalDateTime.now().with(TemporalAdjusters.next(diaDaSemana));
+    public static LocalDate diaNaProximaSemana(DayOfWeek diaDaSemana) {
+        return LocalDateTime.now().with(TemporalAdjusters.next(diaDaSemana)).toLocalDate();
     }
 }

@@ -20,7 +20,7 @@ public class RestauranteEntity {
     private String localizacao;
     private String tipoCozinha;
 
-    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private final List<HorarioDeFuncionamentoEntity> horariosDeFuncionamento = new ArrayList<>();
 
     private int capacidade;

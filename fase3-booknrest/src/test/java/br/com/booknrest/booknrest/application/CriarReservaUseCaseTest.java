@@ -58,7 +58,7 @@ class CriarReservaUseCaseTest {
         List<Reserva> reservas = List.of(
                 new Reserva(1L, RESTAURANTE, new Cliente(2L, "Beto", TELEFONE), proximoDiaAoAbrir, 100, Reserva.StatusReserva.CONFIRMADA)
         );
-        when(reservaGateway.reservasDoDiaPara(RESTAURANTE)).thenReturn(reservas);
+        when(reservaGateway.reservasDoDiaPara(proximoDiaAoAbrir.toLocalDate(), RESTAURANTE)).thenReturn(reservas);
 
         assertDoesNotThrow(() ->
                 criarReservaUseCase.criarReserva(1L, CLIENTE, proximoDiaAoAbrir, 6)
@@ -88,7 +88,7 @@ class CriarReservaUseCaseTest {
                 new Reserva(1L, RESTAURANTE, new Cliente(2L, "Beto", TELEFONE), proximoDiaAoAbrir, 100, Reserva.StatusReserva.CONFIRMADA),
                 new Reserva(1L, RESTAURANTE, CLIENTE, proximoDiaAoAbrir, 6, Reserva.StatusReserva.CONFIRMADA)
         );
-        when(reservaGateway.reservasDoDiaPara(RESTAURANTE)).thenReturn(reservas);
+        when(reservaGateway.reservasDoDiaPara(proximoDiaAoAbrir.toLocalDate(), RESTAURANTE)).thenReturn(reservas);
 
         assertThatThrownBy(() ->
                 criarReservaUseCase.criarReserva(1L, CLIENTE, proximoDiaAoAbrir, 6))
@@ -107,7 +107,7 @@ class CriarReservaUseCaseTest {
                 new Reserva(1L, RESTAURANTE, new Cliente(2L, "Beto", TELEFONE), proximoDiaAoAbrir, 100, Reserva.StatusReserva.CONFIRMADA),
                 new Reserva(1L, RESTAURANTE, new Cliente(3L, "Bebeto", TELEFONE), proximoDiaAoAbrir, 60, Reserva.StatusReserva.CONFIRMADA)
             );
-        when(reservaGateway.reservasDoDiaPara(RESTAURANTE)).thenReturn(reservas);
+        when(reservaGateway.reservasDoDiaPara(proximoDiaAoAbrir.toLocalDate(), RESTAURANTE)).thenReturn(reservas);
 
         assertThatThrownBy(() ->
                 criarReservaUseCase.criarReserva(1L, CLIENTE, proximoDiaAoAbrir, 6))
