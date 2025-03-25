@@ -15,7 +15,9 @@ public class RestauranteHelperFactory {
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().registerModule(new JavaTimeModule());
 
     public static RestauranteDTO getRestauranteDtoNomeAleatorio() {
-        var list = List.of(getHorarioDeFuncionamento());
+        var list = List.of(
+                getHorarioDeFuncionamento(DayOfWeek.MONDAY),
+                getHorarioDeFuncionamento(DayOfWeek.SATURDAY));
 
         return new RestauranteDTO(null, GeradorDeNomesAleatorios.geraNome(6),
                 "Mooca", "frutos do mar", list, 160);
@@ -34,9 +36,9 @@ public class RestauranteHelperFactory {
         }
     }
 
-    private static RestauranteDTO.HorarioDeFuncionamentoDTO getHorarioDeFuncionamento() {
+    private static RestauranteDTO.HorarioDeFuncionamentoDTO getHorarioDeFuncionamento(DayOfWeek dayOfWeek) {
         return new RestauranteDTO.HorarioDeFuncionamentoDTO(
-                null, DayOfWeek.MONDAY, LocalTime.of(11, 0), LocalTime.of(14, 0));
+                null, dayOfWeek, LocalTime.of(19, 0), LocalTime.of(23, 0));
     }
 
 }

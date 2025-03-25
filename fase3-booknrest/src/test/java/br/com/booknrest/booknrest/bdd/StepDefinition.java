@@ -1,5 +1,6 @@
 package br.com.booknrest.booknrest.bdd;
 
+import br.com.booknrest.booknrest.infra.rest.ReservaDTO;
 import br.com.booknrest.booknrest.infra.rest.RestauranteDTO;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Entao;
@@ -9,6 +10,7 @@ import io.restassured.response.Response;
 
 import java.util.List;
 
+import static br.com.booknrest.booknrest.util.ReservaHelperFactory.getNovaReservaDTO;
 import static br.com.booknrest.booknrest.util.RestauranteHelperFactory.getRestauranteDtoNomeAleatorio;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -57,5 +59,43 @@ public class StepDefinition {
                 .jsonPath().getList(".", RestauranteDTO.class);
 
         assertThat(list).isNotEmpty();
+    }
+
+    @Quando("criar nova reserva")
+    public void criarNovaReserva() {
+        response =
+                given()
+                        .contentType(ContentType.JSON)
+                        .body(getNovaReservaDTO())
+                .when()
+                        .post(ENDPOINT_API+"/reservas");
+    }
+
+    @Dado("que existe ao menos uma reserva cadastrada")
+    public void queExisteAoMenosUmaReservaCadastrada() {
+        criarNovaReserva();
+    }
+
+    @Quando("o usuario listar as reservas")
+    public void oUsuarioListarAsReservas() {
+        response = given()
+                .when().get(ENDPOINT_API+"/reservas");
+    }
+
+    @Entao("deve retornar a lista com as reservas existentes")
+    public void deveRetornarAListaComAsReservasExistentes() {
+        List<ReservaDTO> list = response.then()
+                .statusCode(200)
+                .extract().body()
+                .jsonPath().getList(".", ReservaDTO.class);
+
+        assertThat(list).isNotEmpty();
+    }
+
+    @Entao("deve responder que a reserva foi criada corretamente")
+    public void deveResponderQueAReservaFoiCriadaCorretamente() {
+        response.then()
+                .statusCode(201)
+                .body(matchesJsonSchemaInClasspath("schemas/Reserva.schema.json"));
     }
 }

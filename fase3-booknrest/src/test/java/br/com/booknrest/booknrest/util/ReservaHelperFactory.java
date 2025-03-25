@@ -4,6 +4,7 @@ import br.com.booknrest.booknrest.entities.Cliente;
 import br.com.booknrest.booknrest.entities.HorarioDeFuncionamento;
 import br.com.booknrest.booknrest.entities.Reserva;
 import br.com.booknrest.booknrest.entities.Restaurante;
+import br.com.booknrest.booknrest.infra.rest.ReservaDTO;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -15,6 +16,9 @@ public class ReservaHelperFactory {
     public static final Restaurante RESTAURANTE = RestauranteHelperFactory.getRestauranteNomeAleatorio();
     public static final String TELEFONE = "10 99999-9999";
 
+    public static ReservaDTO getNovaReservaDTO() {
+        return new ReservaDTO(null, 1L, ReservaDTO.toDTO(getClienteNomeAleatorio()), LocalDateTime.of(2027, 3, 13, 20, 0), 10, null);
+    }
 
     public static LocalDateTime getProximoDiaAoAbrir(Restaurante restaurante) {
         HorarioDeFuncionamento horario = restaurante.getHorariosDeFuncionamento().getFirst();

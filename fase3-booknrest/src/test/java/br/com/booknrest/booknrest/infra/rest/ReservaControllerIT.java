@@ -9,10 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static br.com.booknrest.booknrest.infra.rest.ReservaController.RESERVA;
+import static br.com.booknrest.booknrest.util.ReservaHelperFactory.getNovaReservaDTO;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,7 +38,7 @@ class ReservaControllerIT {
         void criaReserva() {
             given()
                     .contentType(ContentType.JSON)
-                    .body(new ReservaDTO(null, 1L, new ReservaDTO.ClienteDto(null, "Ciclano", "10 99999-9999"), LocalDateTime.of(2027, 3, 13, 20, 0), 10, null))
+                    .body(getNovaReservaDTO())
             .when()
                     .post("/booknrest/v1/reservas")
             .then()
