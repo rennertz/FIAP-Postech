@@ -76,4 +76,8 @@ public class CriarReservaUseCase {
             throw new ErroDeValidacao("Restaurante sem vagas nesse dia");
         }
     }
+
+    public List<Reserva> obtemTodasAsReservas() {
+        return reservaGateway.obtemTodasAsReservas();
+    }
 }

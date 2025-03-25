@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "required": [
+    "id",
+    "restauranteId",
+    "cliente",
+    "dataHora",
+    "quantidadePessoas",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "restauranteId": {
+      "type": "integer"
+    },
+    "cliente": {
+      "type": "object",
+      "required": [
+        "id",
+        "nome",
+        "telefone"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "nome": {
+          "type": "string"
+        },
+        "telefone": {
+          "type": "string"
+        }
+      }
+    },
+    "dataHora": {
+      "type": "string"
+    },
+    "quantidadePessoas": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "string"
+    }
+  }
+}

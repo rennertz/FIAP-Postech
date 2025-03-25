@@ -2,7 +2,7 @@ package br.com.booknrest.booknrest.application;
 
 import br.com.booknrest.booknrest.entities.Cliente;
 import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
-import br.com.booknrest.booknrest.util.GeradorDeNomesAleatorios;
+import br.com.booknrest.booknrest.util.ReservaHelperFactory;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @ActiveProfiles("test")
 @Transactional
 class CriarReservaUseCaseIT {
-    public static final String TELEFONE = "10 99999-9999";
     public static final LocalDateTime DATA_HORA_DISPONIVEL = LocalDateTime.of(
             diaNaProximaSemana(DayOfWeek.SATURDAY),
             LocalTime.of(20, 0));
@@ -34,12 +33,11 @@ class CriarReservaUseCaseIT {
     @Test
     void criarReservaValidaSeHaVagas() {
 
-        Cliente cliente1 = new Cliente(null, GeradorDeNomesAleatorios.geraNome(6), TELEFONE);
         assertDoesNotThrow(() ->
-                criarReservaUseCase.criarReserva(1L, cliente1, DATA_HORA_DISPONIVEL, 40)
+                criarReservaUseCase.criarReserva(1L, ReservaHelperFactory.getClienteNomeAleatorio(), DATA_HORA_DISPONIVEL, 40)
         );
 
-        Cliente cliente2 = new Cliente(null, GeradorDeNomesAleatorios.geraNome(6), TELEFONE);
+        Cliente cliente2 = ReservaHelperFactory.getClienteNomeAleatorio();
         assertThatThrownBy(() ->
                 criarReservaUseCase.criarReserva(1L, cliente2, DATA_HORA_DISPONIVEL, 40))
                 .isInstanceOf(ErroDeValidacao.class)

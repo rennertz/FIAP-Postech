@@ -7,16 +7,19 @@ import jakarta.persistence.*;
 public class ClienteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final Long id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
-    private final String nome;
-    private final String telefone;
+    private String nome;
+    private String telefone;
 
     public ClienteEntity(Long id, String nome, String telefone) {
         this.id = id;
         this.nome = nome;
         this.telefone = telefone;
+    }
+
+    public ClienteEntity() {
     }
 
     public Long getId() {

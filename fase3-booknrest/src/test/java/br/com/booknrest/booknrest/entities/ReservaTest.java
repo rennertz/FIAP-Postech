@@ -18,22 +18,21 @@ class ReservaTest {
     @Test
     void novaReservaInvalida() {
 
-        Cliente cliente = CLIENTE;
         LocalDateTime proximoDiaAoAbrir = getProximoDiaAoAbrir(RESTAURANTE);
 
-        assertDoesNotThrow(() -> new Reserva(RESTAURANTE, cliente, proximoDiaAoAbrir, 6));
+        assertDoesNotThrow(() -> new Reserva(RESTAURANTE, CLIENTE, proximoDiaAoAbrir, 6));
 
-        assertThatThrownBy(() -> new Reserva(null, cliente, proximoDiaAoAbrir, 6))
+        assertThatThrownBy(() -> new Reserva(null, CLIENTE, proximoDiaAoAbrir, 6))
                 .isInstanceOf(ErroDeValidacao.class);
         assertThatThrownBy(() -> new Reserva(RESTAURANTE, null, proximoDiaAoAbrir, 6))
                 .isInstanceOf(ErroDeValidacao.class);
-        assertThatThrownBy(() -> new Reserva(RESTAURANTE, cliente, null, 6))
+        assertThatThrownBy(() -> new Reserva(RESTAURANTE, CLIENTE, null, 6))
                 .isInstanceOf(ErroDeValidacao.class);
-        assertThatThrownBy(() -> new Reserva(RESTAURANTE, cliente, null, 0))
+        assertThatThrownBy(() -> new Reserva(RESTAURANTE, CLIENTE, null, 0))
                 .isInstanceOf(ErroDeValidacao.class);
-        assertThatThrownBy(() -> new Reserva(RESTAURANTE, cliente, null, -1))
+        assertThatThrownBy(() -> new Reserva(RESTAURANTE, CLIENTE, null, -1))
                 .isInstanceOf(ErroDeValidacao.class);
-        assertThatThrownBy(() -> new Reserva(RESTAURANTE, cliente, null, 101))
+        assertThatThrownBy(() -> new Reserva(RESTAURANTE, CLIENTE, null, 101))
                 .isInstanceOf(ErroDeValidacao.class);
     }
 

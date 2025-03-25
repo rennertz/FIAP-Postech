@@ -38,4 +38,10 @@ public class ReservaGateway {
                 .map(mapper::toDomain)
                 .toList();
     }
+
+    public List<Reserva> obtemTodasAsReservas() {
+        return repository.findAll().stream()
+                .map(mapper::toDomain)
+                .toList();
+    }
 }

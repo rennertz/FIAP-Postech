@@ -3,6 +3,8 @@ package br.com.booknrest.booknrest.entities;
 import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
 
 import java.time.LocalDateTime;
+import java.time.format.TextStyle;
+import java.util.Locale;
 import java.util.Objects;
 
 public class Reserva {
@@ -23,7 +25,7 @@ public class Reserva {
         }
 
         if (!restaurante.estaraAbertoNoHorario(dataHora)) {
-            throw new ErroDeValidacao("O restaurante não está aberto neste horário.");
+            throw new ErroDeValidacao("O restaurante não está aberto neste horário, " + dataHora.toLocalTime() +" de "+ dataHora.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.of("pt","BR")));
         }
 
         this.id = id;
