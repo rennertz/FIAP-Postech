@@ -17,7 +17,7 @@ WORKDIR $APP_HOME
 
 # Copia o arquivo JAR já gerado para o container
 COPY --from=buildstage $APP_HOME .
-RUN mv "$APP_HOME/target/*.jar" "$APP_HOME/target/app.jar"
+RUN mv "$APP_HOME"/target/*.jar "$APP_HOME"/target/app.jar
 
 # Exposição da porta 8080
 EXPOSE 8080
