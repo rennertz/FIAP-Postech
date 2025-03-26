@@ -3,6 +3,8 @@ package br.com.booknrest.booknrest.entities;
 import br.com.booknrest.booknrest.exceptions.ErroDeValidacao;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 public class Cliente {
     private final Long id;
     private final String nome;
@@ -32,5 +34,17 @@ public class Cliente {
 
     public String getTelefone() {
         return telefone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Cliente cliente = (Cliente) o;
+        return Objects.equals(id, cliente.id) && Objects.equals(nome, cliente.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome);
     }
 }

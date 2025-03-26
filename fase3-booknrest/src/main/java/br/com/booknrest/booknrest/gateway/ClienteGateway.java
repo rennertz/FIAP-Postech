@@ -17,8 +17,14 @@ public class ClienteGateway {
         this.mapper = mapper;
     }
 
-    public Cliente cadastra(Cliente cliente) {
-        ClienteEntity saved = repository.save(mapper.toEntity(cliente));
-        return mapper.toDomain(saved);
+    public Cliente getOrSave(Cliente cliente) {
+        ClienteEntity clienteEntity = getOrSave(mapper.toEntity(cliente));
+        return mapper.toDomain(clienteEntity);
+    }
+
+    private ClienteEntity getOrSave(ClienteEntity entityToCheck) {
+        return repository.getByNome(entityToCheck.getNome()).orElseGet(() ->
+                repository.save(entityToCheck)
+        );
     }
 }

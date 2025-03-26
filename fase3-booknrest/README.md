@@ -11,6 +11,13 @@ alternativamente, execute
 ```shell
 docker compose -f run/compose.yaml up
 ```
+ou ainda, execute cada linha sequencialmente
+```
+docker image build . -t fiap-booknrest:latest 
+docker network create my-network 
+docker run -d --name postgres --network my-network -e POSTGRES_DB=mydatabase -e POSTGRES_PASSWORD=secret -e POSTGRES_USER=myuser -p 5432:5432 postgres:latest
+docker run -d --name booknrest --network my-network -p 8080:8080 -e DB_URL=jdbc:postgresql://postgres:5432/mydatabase fiap-booknrest:latest
+```
 
 ## Test
 

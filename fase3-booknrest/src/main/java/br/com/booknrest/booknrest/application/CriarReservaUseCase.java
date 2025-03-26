@@ -34,8 +34,7 @@ public class CriarReservaUseCase {
         Restaurante restaurante = restauranteGateway.obtemPeloId(restauranteId)
                 .orElseThrow(() -> new ErroDeValidacao("Restaurante não encontrado"));
 
-        // TODO identificacao se cliente existe
-        Cliente clienteSalvo = clienteGateway.cadastra(cliente);
+        Cliente clienteSalvo = clienteGateway.getOrSave(cliente);
         Reserva reserva = new Reserva(null, restaurante, clienteSalvo, dataHora, quantidadePessoas, Reserva.StatusReserva.PENDENTE);
         avaliaReservasDoDia(reserva);
 

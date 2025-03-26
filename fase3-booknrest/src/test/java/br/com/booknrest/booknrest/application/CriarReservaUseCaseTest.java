@@ -51,7 +51,7 @@ class CriarReservaUseCaseTest {
     @Test
     void criarReservaValida() {
         when(restauranteGateway.obtemPeloId(1L)).thenReturn(Optional.of(RESTAURANTE));
-        when(clienteGateway.cadastra(CLIENTE)).thenReturn(CLIENTE);
+        when(clienteGateway.getOrSave(CLIENTE)).thenReturn(CLIENTE);
 
         LocalDateTime proximoDiaAoAbrir = getProximoDiaAoAbrir(RESTAURANTE);
         when(reservaGateway.salva(any(Reserva.class))).thenReturn(new Reserva(1L, RESTAURANTE, CLIENTE, proximoDiaAoAbrir, 6, Reserva.StatusReserva.PENDENTE));
@@ -80,7 +80,7 @@ class CriarReservaUseCaseTest {
     @Test
     void criarReservaRestauranteClienteJaReservouEsteDia() {
         when(restauranteGateway.obtemPeloId(1L)).thenReturn(Optional.of(RESTAURANTE));
-        when(clienteGateway.cadastra(CLIENTE)).thenReturn(CLIENTE);
+        when(clienteGateway.getOrSave(CLIENTE)).thenReturn(CLIENTE);
 
         LocalDateTime proximoDiaAoAbrir = getProximoDiaAoAbrir(RESTAURANTE);
 
@@ -99,7 +99,7 @@ class CriarReservaUseCaseTest {
     @Test
     void criarReservaRestauranteCapacidadeEsgotada() {
         when(restauranteGateway.obtemPeloId(1L)).thenReturn(Optional.of(RESTAURANTE));
-        when(clienteGateway.cadastra(CLIENTE)).thenReturn(CLIENTE);
+        when(clienteGateway.getOrSave(CLIENTE)).thenReturn(CLIENTE);
 
         LocalDateTime proximoDiaAoAbrir = getProximoDiaAoAbrir(RESTAURANTE);
 
